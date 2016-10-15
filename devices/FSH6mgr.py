@@ -2,6 +2,8 @@ import serial
 import ConfigParser
 import time
 
+__author__="slaven"
+
 class FSH6mgr:
     def connect(self, fshport):
         self.fsh=serial.Serial()

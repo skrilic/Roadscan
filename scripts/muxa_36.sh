@@ -1,6 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
 echo -e "MAKE SURE GPS AND FSH ARE CONNECTED?"
-python usb_connected_devices.py
 echo -e "PRESS ANY KEY FOR NEXT ... ..."
 read tipka2
 #su -c ./testports.sh
@@ -10,7 +9,7 @@ read tipka2
 #exit()
 #fi
 su -c "chmod 777 /dev/ttyUSB0; chmod 777 /dev/ttyUSB1"
-python gpspectrum.py -g off -p /dev/ttyUSB0 -d data/avioband -c aviovhf -t 10 -s 3
+python gpspectrum.py -g off -p /dev/ttyUSB0 -d data/muxa_36 -c muxa_36 -t 10 -s 3
 echo -e "PRESS ANY KEY FOR NEXT ... OR Ctrl+C TO STOP."
 read tipka3
 echo -e "HOW LONG THE MEASUREMENT IS GOING TO LAST IN secs:"
@@ -18,5 +17,4 @@ read timesec
 echo -e "GPS PORT (ie. /dev/ttyUSB1 or off to disable GPS read out):"
 read gpsport
 echo -e "MEASUREMENT IS STARTING..."
-python gpspectrum.py -g $gpsport -p /dev/ttyUSB0 -d data/avioband -c aviovhf -t $timesec -s 2
-
+python gpspectrum.py -g $gpsport -p /dev/ttyUSB0 -d data/muxa_36 -c muxa_36 -t $timesec -s 2

@@ -143,7 +143,10 @@ def latlong(port, type):
         mygps = Gpsmgr()
         mygps.setport(port)
         mygps.setgpstype(type)
-        mylocation=mygps.getpos()
+        try:
+            mylocation=mygps.getpos()
+        except:
+            mylocation("undefined,undefined")
         #gpstime=mygps.getgpstime()
     return mylocation
 
@@ -169,7 +172,7 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig
     this function is called to create log and picture specific for that point.
     """
     config = ConfigParser.ConfigParser()
-    config.read("%s/Dokumenti/gpspectrum/conf/%s.ini" % (homedir,fshconfig))
+    config.read("conf/%s.ini" % (fshconfig))
     #
     fstart = float(config.get("frequency","start"))
     fstop = float(config.get("frequency","stop"))

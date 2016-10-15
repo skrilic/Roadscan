@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 
 __author__="slaven"
-__date__ ="$28.05.2010. 10:51:58$"
+#__date__ ="$28.05.2010. 10:51:58$"
 
 import sys
 import os
 import ConfigParser
 from string import Template
 
-#User's Home folder ...
-homedir = os.getenv("HOME")
 tmplvar=""
-tmplplacemark= "%s/gpspectrum/templates/kmlbody.xml" % homedir
+tmplplacemark= "templates/kmlbody.xml"
 config = ConfigParser.ConfigParser()
-config.read("%s/gpspectrum/conf/kml.ini" % homedir)
+config.read("conf/kml.ini")
 ptcsv = config.get("webroot","csv")
 ptimg = config.get("webroot","image")
 
@@ -32,9 +30,10 @@ def file2string(filein):
 #    tmplvar = tmplvar + line
 #kmlplacemark=Template(tmplvar)
 
-def kmlgenerator(measlogfile,kmlout):
-    tmpldir = "%s/gpspectrum/templates" % homedir
+def kmlgenerator(measlogfile, kmlout):
+    tmpldir = "templates"
     # First remove remaining KML file ...
+    print("KML file output: {}".format(kmlout))
     if os.path.isfile(kmlout) == True:
         os.remove(kmlout)
     kmlfile = open(kmlout,'a')
@@ -67,9 +66,9 @@ def kmlgenerator(measlogfile,kmlout):
         coordinates = "%s,%s" %(long,latit)
         if elm[0] != 'datetime':
             description = elm[0] #Date and Time
-            csvfile = elm[3]
-            pngfile = elm[4]
-            placemark = Template(file2string(tmplplacemark)).substitute(pathtocsv=ptcsv,pathtoimage=ptimg,name=i,coords=coordinates,desc=description,csv=csvfile,spectrum=pngfile)
+            csvfile = elm[4]
+            pngfile = elm[5]
+            placemark = Template(file2string(tmplplacemark)).substitute(pathtocsv=ptcsv, pathtoimage=ptimg, name=i, coords=coordinates, desc=description, csv=csvfile, spectrum=pngfile)
             kmlfile.write(placemark)
             i=i+1
     #At last, write footer of KML file and then, close it.    
@@ -80,9 +79,13 @@ def kmlgenerator(measlogfile,kmlout):
     return
 
 def main():
+    # Where is measlog File ...
     measlog = sys.argv[1]
+    # Where to put generated KML file ...
     kmloutput = sys.argv[2]
-    kmlgenerator(measlog,kmloutput)
+    #print("Meas. log file: {} and KML file is: {}".format(measlog, kmloutput))
+    print sys.argv
+    kmlgenerator(measlog, kmloutput)
 
 if __name__ == "__main__":
     main()

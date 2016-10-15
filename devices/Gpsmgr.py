@@ -1,5 +1,8 @@
 import gpsbabel
 
+__author__="slaven"
+
+
 class Gpsmgr:
     """
     Handling gpsbabel command get_posn. This way it is possible to get latitude,
