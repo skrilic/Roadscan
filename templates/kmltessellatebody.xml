@@ -1,0 +1,13 @@
+		<Placemark>
+		  <name>Max. value in the band</name>
+		  <description>Values along the path</description>
+		  <styleUrl>#$style</styleUrl>
+		  <LineString>
+		    <extrude>1</extrude>
+		    <tessellate>1</tessellate>
+		    <altitudeMode>relativeToGround</altitudeMode>
+		    <coordinates>
+			    $coords_values
+		    </coordinates>
+		  </LineString>
+		</Placemark>

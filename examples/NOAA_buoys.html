@@ -1,0 +1,324 @@
+
+        <!DOCTYPE html>
+        <head>
+            
+        
+            <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        
+            
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+        
+        
+        
+            
+        
+            <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+        
+        
+        
+            
+        
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        
+        
+        
+            
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js"></script>
+        
+        
+        
+            
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"></script>
+        
+        
+        
+            
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
+        
+        
+        
+            
+        
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+        
+        
+        
+            
+        
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+        
+        
+        
+            
+        
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+        
+        
+        
+            
+        
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+        
+        
+        
+            
+        
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
+        
+        
+        
+            
+        
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
+        
+        
+        
+            
+        
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
+        
+        
+        
+            
+        
+            <link rel="stylesheet" href="https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css" />
+        
+        
+        
+            
+            <style>
+
+            html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                }
+
+            #map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+            
+        
+            
+            <style> #map_7d7935cf5e04497599cf5b990042c285 {
+                position : relative;
+                width : 100.0%;
+                height: 100.0%;
+                left: 0.0%;
+                top: 0.0%;
+                }
+            </style>
+        
+        
+            
+            <style> #vega_c4536b4c92da4ee1bbd2d1e1e7806bed {
+                position : relative;
+                width : 500.0px;
+                height: 250.0px;
+                left: 0.0%;
+                top: 0.0%;
+            </style>
+            
+        
+            
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+        
+        
+        
+            
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"></script>
+        
+        
+        
+            
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.2/leaflet-dvf.markers.min.js"></script>
+        
+        
+        
+            
+            <style> #vega_43b29bc18f104157a2aac9070fb836be {
+                position : relative;
+                width : 500.0px;
+                height: 250.0px;
+                left: 0.0%;
+                top: 0.0%;
+            </style>
+            
+        
+            
+            <style> #vega_28b4e77ba5c3436a820928feb0ca4af6 {
+                position : relative;
+                width : 500.0px;
+                height: 250.0px;
+                left: 0.0%;
+                top: 0.0%;
+            </style>
+            
+        
+        
+        </head>
+        <body>
+            
+        
+            
+            <div class="folium-map" id="map_7d7935cf5e04497599cf5b990042c285" ></div>
+        
+        
+        
+        </body>
+        <script>
+            
+        
+            
+
+            var southWest = L.latLng(-90, -180);
+            var northEast = L.latLng(90, 180);
+            var bounds = L.latLngBounds(southWest, northEast);
+
+            var map_7d7935cf5e04497599cf5b990042c285 = L.map('map_7d7935cf5e04497599cf5b990042c285', {
+                                           center:[46.3014,-123.739],
+                                           zoom: 7,
+                                           maxBounds: bounds,
+                                           layers: [],
+                                           crs: L.CRS.EPSG3857
+                                         });
+            
+        
+        
+            
+            var tile_layer_fef9469106ab4225bf556d980b46b105 = L.tileLayer(
+                'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg',
+                {
+                    maxZoom: 18,
+                    minZoom: 1,
+                    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
+                    detectRetina: false
+                    }
+                ).addTo(map_7d7935cf5e04497599cf5b990042c285);
+
+        
+        
+            
+            var regular_polygon_marker_4eeeab39baed4658b9d7c65d435126c6 = new L.RegularPolygonMarker(
+                new L.LatLng(47.3489,-124.708),
+                {
+                    icon : new L.Icon.Default(),
+                    color: 'black',
+                    opacity: 1,
+                    weight: 2,
+                    fillColor: '#43d9de',
+                    fillOpacity: 1,
+                    numberOfSides: 4,
+                    rotation: 0,
+                    radius: 12
+                    }
+                )
+                .addTo(map_7d7935cf5e04497599cf5b990042c285);
+            
+        
+            function vega_parse(spec, div) {
+            vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}
+        
+            
+            var popup_ef06124b856b48ebbc9f6e96af309c46 = L.popup({maxWidth: '800'});
+
+            
+                var vega_c4536b4c92da4ee1bbd2d1e1e7806bed = $('             <div id="vega_c4536b4c92da4ee1bbd2d1e1e7806bed"></div>             ')[0];
+                popup_ef06124b856b48ebbc9f6e96af309c46.setContent(vega_c4536b4c92da4ee1bbd2d1e1e7806bed);
+            
+
+            regular_polygon_marker_4eeeab39baed4658b9d7c65d435126c6.bindPopup(popup_ef06124b856b48ebbc9f6e96af309c46);
+
+            
+                
+            vega_parse([1, 2, 3],vega_c4536b4c92da4ee1bbd2d1e1e7806bed);
+            
+            
+        
+        
+            
+            var regular_polygon_marker_4248b377038e4787a02f5f918ae5b474 = new L.RegularPolygonMarker(
+                new L.LatLng(44.639,-124.5339),
+                {
+                    icon : new L.Icon.Default(),
+                    color: 'black',
+                    opacity: 1,
+                    weight: 2,
+                    fillColor: '#43d9de',
+                    fillOpacity: 1,
+                    numberOfSides: 4,
+                    rotation: 0,
+                    radius: 12
+                    }
+                )
+                .addTo(map_7d7935cf5e04497599cf5b990042c285);
+            
+        
+            
+            var popup_c30220e12ba5409c90b7f85dd926e07c = L.popup({maxWidth: '800'});
+
+            
+                var vega_43b29bc18f104157a2aac9070fb836be = $('             <div id="vega_43b29bc18f104157a2aac9070fb836be"></div>             ')[0];
+                popup_c30220e12ba5409c90b7f85dd926e07c.setContent(vega_43b29bc18f104157a2aac9070fb836be);
+            
+
+            regular_polygon_marker_4248b377038e4787a02f5f918ae5b474.bindPopup(popup_c30220e12ba5409c90b7f85dd926e07c);
+
+            
+                
+            vega_parse([1, 2, 3],vega_43b29bc18f104157a2aac9070fb836be);
+            
+            
+        
+        
+            
+            var regular_polygon_marker_dfd241d92cc6470d8cc20d70a2fda191 = new L.RegularPolygonMarker(
+                new L.LatLng(46.216,-124.128),
+                {
+                    icon : new L.Icon.Default(),
+                    color: 'black',
+                    opacity: 1,
+                    weight: 2,
+                    fillColor: '#43d9de',
+                    fillOpacity: 1,
+                    numberOfSides: 4,
+                    rotation: 0,
+                    radius: 12
+                    }
+                )
+                .addTo(map_7d7935cf5e04497599cf5b990042c285);
+            
+        
+            
+            var popup_274c4ce500cb48b8839f2df30aa66aca = L.popup({maxWidth: '800'});
+
+            
+                var vega_28b4e77ba5c3436a820928feb0ca4af6 = $('             <div id="vega_28b4e77ba5c3436a820928feb0ca4af6"></div>             ')[0];
+                popup_274c4ce500cb48b8839f2df30aa66aca.setContent(vega_28b4e77ba5c3436a820928feb0ca4af6);
+            
+
+            regular_polygon_marker_dfd241d92cc6470d8cc20d70a2fda191.bindPopup(popup_274c4ce500cb48b8839f2df30aa66aca);
+
+            
+                
+            vega_parse([1, 2, 3],vega_28b4e77ba5c3436a820928feb0ca4af6);
+            
+            
+        
+        
+        
+        </script>
+        

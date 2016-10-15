@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/70/trunk/gpspectrum/src/templates
+END
+kmlheader.xml
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/70/trunk/gpspectrum/src/templates/kmlheader.xml
+END
+kmltessellatebody.xml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/61/trunk/gpspectrum/src/templates/kmltessellatebody.xml
+END
+kmlbody.xml
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/63/trunk/gpspectrum/src/templates/kmlbody.xml
+END
+kmlfooter.xml
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/40/trunk/gpspectrum/src/templates/kmlfooter.xml
+END

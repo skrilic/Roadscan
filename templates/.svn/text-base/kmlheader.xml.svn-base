@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <kml xmlns="http://earth.google.com/kml/2.2">
+            <Document>
+             <name>Measurement path</name>
+		    <description>Tessallation represent choosen signal feature, and points consist details.</description>
+		    <Style id="yellowLineGreenPoly">
+		      <LineStyle>
+			<color>7f00ffff</color>
+			<width>4</width>
+		      </LineStyle>
+		      <PolyStyle>
+			<color>7f00ff00</color>
+		      </PolyStyle>
+		    </Style>
+		    <Style id="redLineOrangePoly">
+		      <LineStyle>
+			<color>501400FF</color>
+			<width>4</width>
+		      </LineStyle>
+		      <PolyStyle>
+			<color>5014B4FA</color>
+		      </PolyStyle>
+		    </Style>
