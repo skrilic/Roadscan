@@ -14,7 +14,7 @@ import ConfigParser
 #from string import Template
 import os
 
-import devices.Gpsmgr as Gpsmgr
+from devices.Gpsmgr import Gpsmgr as Gpsmgr
 from devices.FSH6mgr import FSH6mgr as FSH6
 
 homedir = os.getenv("HOME")
@@ -288,7 +288,8 @@ def meascontrol(dirmeas):
     clearfsh.close()
     #
     config = ConfigParser.ConfigParser()
-    config.read("%s/conf/%s.ini" % (dirmeas,vars['config']))
+    print("Config file: ./conf/{}.ini".format(vars['config']))
+    config.read("./conf/%s.ini" % (vars['config']))
     threshold = float(config.get("level","threshold"))
     #
     start = time.time()

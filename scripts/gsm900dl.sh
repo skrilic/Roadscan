@@ -1,6 +1,6 @@
 #!/bin/bash
-echo -e "PROVJERITE DA LI SU SPOJENI GPS I FSH NA NOTEBOOK?"
-echo -e "PRITISNITE BILO STO ZA NASTAVAK ..."
+echo -e "MAKE SURE GPS AND FSH ARE CONNECTED?"
+echo -e "PRESS ANY KEY FOR NEXT ... ..."
 read tipka2
 #su -c ./testports.sh
 #echo -e "AKO JE SVE UREDU, PRITISNITE d ZA NASTAVAK. "
@@ -9,13 +9,13 @@ read tipka2
 #exit()
 #fi
 su -c "chmod 777 /dev/ttyUSB0; chmod 777 /dev/ttyUSB1"
-python gpspectrum.py -g off -p /dev/ttyUSB0 -d /home/slaven/Documents/gsm900dl -c gsm900dl -t 10 -s 3
-echo -e "AKO JE PROBNO MJERENJE PROSLO UREDU PRITISNITE BILO KOJU TIPKU ZA NASTAVAK:"
+python gpspectrum.py -g off -p /dev/ttyUSB0 -d data/gsm900dl -c gsm900dl -t 10 -s 3
+echo -e "PRESS ANY KEY FOR NEXT ... OR Ctrl+C TO STOP."
 read tipka3
-echo -e "KOLIKO DUGO CE TRAJATI MJERENJE U SEKUNDAMA (40min=2400sec):"
+echo -e "HOW LONG THE MEASUREMENT IS GOING TO LAST IN secs:"
 read timesec
-echo -e "GPS PORT (npr. /dev/ttyUSB1 ili off za iskljuceno):"
+echo -e "GPS PORT (ie. /dev/ttyUSB1 or off to disable GPS read out):"
 read gpsport
-echo -e "MJERENJE POCINJE..."
-python gpspectrum.py -g $gpsport -p /dev/ttyUSB0 -d /home/slaven/Documents/gsm900dl -c gsm900dl -t $timesec -s 2
+echo -e "MEASUREMENT IS STARTING..."
+python gpspectrum.py -g $gpsport -p /dev/ttyUSB0 -d data/gsm900dl -c gsm900dl -t $timesec -s 2
 

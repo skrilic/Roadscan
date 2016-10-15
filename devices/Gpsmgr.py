@@ -1,5 +1,4 @@
 import gpsbabel
-import serial
 
 class Gpsmgr:
     """

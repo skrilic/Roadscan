@@ -49,6 +49,7 @@ class FSH6mgr:
         Set instrument for specfic data.
         """
         config = ConfigParser.ConfigParser()
+        print("Config file is ./conf/{}.ini".format(fshconfig))
         config.read("./conf/%s.ini" % (fshconfig))
         fstart = float(config.get("frequency","start"))
         fstop = float(config.get("frequency","stop"))
