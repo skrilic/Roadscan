@@ -50,8 +50,8 @@ def kmlgenerator(measlogfile, kmlout):
     cooval = ""
     for logrow in logobject:
       elm = logrow.split(',')
-      # Skip line with table header (column name)
-      if elm[0] != 'datetime' and elm[0] != '#' and elm[0] != '':
+      # Skip line with table header (column name), comments and empty new lines
+      if elm[0] != 'datetime' and elm[0].strip()[0] != '#' and elm[0].strip() != '':
           cooval = cooval + "%s,%s,%s\r\n" % (elm[2],elm[1],elm[3])
     kmlfile.write(Template(file2string(tsltbody)).substitute(style="redLineOrangePoly",coords_values=cooval)) # Style could be: yellowLineGreenPoly or redLineOrangePoly, for now.
     #

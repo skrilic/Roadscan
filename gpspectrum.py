@@ -146,7 +146,7 @@ def latlong(port, type):
         try:
             mylocation=mygps.getpos()
         except:
-            mylocation("undefined,undefined")
+            mylocation("0.000000,0.000000")
         #gpstime=mygps.getgpstime()
     return mylocation
 
