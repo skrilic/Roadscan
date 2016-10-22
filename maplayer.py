@@ -53,6 +53,7 @@ def kmlgenerator(measlogfile, kmlout):
       # Skip line with table header (column name)
       if elm[0] != 'datetime':
           cooval = cooval + "%s,%s,%s\r\n" % (elm[2],elm[1],elm[3])
+          print(cooval)
     kmlfile.write(Template(file2string(tsltbody)).substitute(style="redLineOrangePoly",coords_values=cooval)) # Style could be: yellowLineGreenPoly or redLineOrangePoly, for now.
     #
     #measlogfile must be opened again for Points definitions.
@@ -71,7 +72,7 @@ def kmlgenerator(measlogfile, kmlout):
             placemark = Template(file2string(tmplplacemark)).substitute(pathtocsv=ptcsv, pathtoimage=ptimg, name=i, coords=coordinates, desc=description, csv=csvfile, spectrum=pngfile)
             kmlfile.write(placemark)
             i=i+1
-    #At last, write footer of KML file and then, close it.    
+    #At last, write footer of KML file and then, close it.
     for line in footer:
         kmlfile.write(line)
     kmlfile.close()
