@@ -93,8 +93,10 @@ ENV/
 ### Example user template
 
 # IntelliJ project files
-.idea
+.idea/
 *.iml
+*.pyc
 out
 gen
 .gitignore
+data/
