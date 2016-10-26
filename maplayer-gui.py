@@ -147,7 +147,7 @@ class KmlGeneratorThread(QThread):
               cooval = cooval + "%s,%s,%s\r\n" % (elm[2],elm[1],elm[3])
               self.emit(SIGNAL('add_point(QString)'), str(j * 100 / max_lines))
               j += 1
-              time.sleep(1)
+              #time.sleep(1)
               #print(cooval)
         string_tsltbody = self.file2string(tsltbody)
         kmlfile.write(Template(string_tsltbody).substitute(style="redLineOrangePoly",
