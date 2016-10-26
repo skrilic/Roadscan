@@ -3,7 +3,8 @@
 __author__="slaven"
 #__date__ ="$28.05.2010. 10:51:58$"
 
-from PySide import QtCore, QtGui
+from PySide import QtGui
+from PySide.QtCore import QThread, SIGNAL
 import os, sys
 import maplayerDesign
 import time
@@ -33,9 +34,6 @@ class KmlGeneratorWindow(QtGui.QWidget, maplayerDesign.Ui_FormKml):
     def open_file(self):
         name = QtGui.QFileDialog.getOpenFileName(self, 'Open File', 'measlog.csv' ,"Log files (*.csv)")
         self.lineEdit_input.setText(name[0])
-        # Reset ProgressBar
-        if self.progressBar.value != 0:
-            self.progressBar.setValue = 0
 
     def save_file(self):
         name = QtGui.QFileDialog.getSaveFileName(self, 'Save File', '', "KML file (*.kml)")
@@ -48,12 +46,29 @@ class KmlGeneratorWindow(QtGui.QWidget, maplayerDesign.Ui_FormKml):
             msg.setText("You must select input and the output file!")
             msg.exec_()
         else:
-            kml_out = KmlGenerator(self.lineEdit_input.text(), self.lineEdit_output.text())
-            if kml_out.kml_generator():
-                msg = QtGui.QMessageBox()
-                msg.setWindowTitle("Information")
-                msg.setText("Program finished.")
 
+            self.progressBar.setMaximum(100)
+            # If progress bar is not at the beginning make sure it is ...
+            self.progressBar.setValue(0)
+
+            self.myThread = KmlGeneratorThread(self.lineEdit_input.text(), self.lineEdit_output.text())
+            self.connect(self.myThread, SIGNAL("add_point(QString)"), self.add_point)
+            self.connect(self.myThread, SIGNAL("finished()"), self.done)
+            self.myThread.start()
+
+    # def add_point(self, signal_from_worker):
+    #     print("Received signal: {}".format(signal_from_worker))
+    #     self.progressBar.setValue(self.progressBar.value() + 1)
+
+    def add_point(self, signal_from_worker):
+        #print("Received signal: {}".format(signal_from_worker))
+        self.progressBar.setValue(int(signal_from_worker))
+        #self.progressBar.setValue(self.progressBar.value() + 1)
+
+    def done(self):
+        # Reset ProgressBar
+        self.progressBar.setValue(0)
+        QtGui.QMessageBox.information(self, "Done!", "KML generated!")
 
     def close_widget(self):
         choice = QtGui.QMessageBox.question(self, "Close the Widget",
@@ -64,11 +79,18 @@ class KmlGeneratorWindow(QtGui.QWidget, maplayerDesign.Ui_FormKml):
         else:
             pass
 
-
-class KmlGenerator:
+# THIS IS WORKER
+class KmlGeneratorThread(QThread):
     def __init__(self, csv_file, kml_file):
+        QThread.__init__(self)
         self.csv_file = csv_file
         self.kml_file = kml_file
+
+    def __del__(self):
+        self.wait()
+
+    def run(self):
+        self.kml_generator
 
     def file2string(self, filein):
         """
@@ -81,6 +103,7 @@ class KmlGenerator:
             stringout = stringout + line
         return stringout
 
+    @property
     def kml_generator(self):
         tmpldir = "templates"
 
@@ -91,8 +114,21 @@ class KmlGenerator:
         if os.path.isfile(name_out) == True:
             os.remove(name_out)
 
-        kmlfile = open(name_out, "a")
         logobject = open(name_in, "r")
+
+        # Find a number of lines in CSV log
+        k = 0
+        for logrow in logobject:
+            elm = logrow.split(',')
+            # Skip line with table header (column name), comments and empty new lines
+            if elm[0] != 'datetime' and elm[0].strip()[0] != '#' and elm[0].strip() != '':
+                k += 1
+        max_lines = k
+        logobject.close()
+
+        logobject = open(name_in, "r")
+        kmlfile = open(name_out, "a")
+
         header = open("%s/kmlheader.xml" % tmpldir, "r")
         footer = open("%s/kmlfooter.xml" % tmpldir, "r")
         # Write header of KML file
@@ -102,15 +138,20 @@ class KmlGenerator:
         #tsltbody=open("%s/kmltessellatebody.xml" % tmpldir,"r")
         tsltbody="%s/kmltessellatebody.xml" % tmpldir
         # Create coords_values
+        j = 0
         cooval = ""
         for logrow in logobject:
           elm = logrow.split(',')
           # Skip line with table header (column name), comments and empty new lines
           if elm[0] != 'datetime' and elm[0].strip()[0] != '#' and elm[0].strip() != '':
               cooval = cooval + "%s,%s,%s\r\n" % (elm[2],elm[1],elm[3])
+              self.emit(SIGNAL('add_point(QString)'), str(j * 100 / max_lines))
+              j += 1
+              time.sleep(1)
               #print(cooval)
         string_tsltbody = self.file2string(tsltbody)
-        kmlfile.write(Template(string_tsltbody).substitute(style="redLineOrangePoly",coords_values=cooval)) # Style could be: yellowLineGreenPoly or redLineOrangePoly, for now.
+        kmlfile.write(Template(string_tsltbody).substitute(style="redLineOrangePoly",
+                                                           coords_values=cooval)) # Style could be: yellowLineGreenPoly or redLineOrangePoly, for now.
         #
         #measlogfile must be opened again for Points definitions.
         logobject.close()
@@ -126,7 +167,13 @@ class KmlGenerator:
                 description = elm[0] #Date and Time
                 csvfile = elm[4]
                 pngfile = elm[5]
-                placemark = Template(self.file2string(tmplplacemark)).substitute(pathtocsv=ptcsv, pathtoimage=ptimg, name=i, coords=coordinates, desc=description, csv=csvfile, spectrum=pngfile)
+                placemark = Template(self.file2string(tmplplacemark)).substitute(pathtocsv=ptcsv,
+                                                                                 pathtoimage=ptimg,
+                                                                                 name=i,
+                                                                                 coords=coordinates,
+                                                                                 desc=description,
+                                                                                 csv=csvfile,
+                                                                                 spectrum=pngfile)
                 kmlfile.write(placemark)
                 i=i+1
         #At last, write footer of KML file and then, close it.
