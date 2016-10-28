@@ -3,3 +3,4 @@ pyserial
 python2-biggles
 pyudev
 folium
+pyrtlsdr
