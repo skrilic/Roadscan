@@ -100,3 +100,4 @@ out
 gen
 .gitignore
 data/
+/examples/
