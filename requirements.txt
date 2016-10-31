@@ -1,3 +1,4 @@
+pyside
 gpsbabel
 pyserial
 #python2-biggles
