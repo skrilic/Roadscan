@@ -12,7 +12,7 @@ from optparse import OptionParser
 import matplotlib.pyplot as plt
 import numpy as np
 
-import ConfigParser
+import configparser
 #from string import Template
 import os
 
@@ -35,7 +35,7 @@ class ResFile:
 
 class Getvar:
     def callexit(self, message_string):
-        print message_string
+        print(message_string)
         exit()
 
     def getvars(self):
@@ -78,7 +78,7 @@ class Getvar:
             self.dirname = options.dir
         else:
             self.dirname = "default"
-            print "Results are going to be stored at $HOME/gpspectrum/data directory"
+            print("Results are going to be stored at $HOME/gpspectrum/data directory")
             #self.callexit("There is not Input directory variable!\r\
             #        For usage, Please type: <program> --help")
         #
@@ -210,7 +210,7 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig
     Function creates log files for further analysis in a GPS position. For every GPS position
     this function is called to create log and picture specific for that point.
     """
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read("conf/%s.ini" % (fshconfig))
     #
     fstart = float(config.get("frequency","start"))
@@ -265,7 +265,7 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig
     bigglesin.open(csvdirname,"biggles.tmp","a")
     #
     #
-    print "-------------------------"
+    print("-------------------------")
     i = 1
     for rez in results:
         freq = fstart + (i-1)*(fstop - fstart)/stepcount
@@ -292,10 +292,10 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig
     # draw( "%s/biggles.tmp" % csvdirname, "%s/%s" % (imagedirname, pngfile),
     #       fstart, fstop, max_min['ymin'], max_min['ymax'],myposition, dattim )
     draw_pyplot("%s/biggles.tmp" % csvdirname, "%s/%s" % (imagedirname, pngfile), myposition, dattim)
-    print "GPS position: %s" % myposition
-    print "Max. %s" % max_min['ymax']
-    print "Min. %s" % max_min['ymin']
-    print "-------------------------"
+    print("GPS position: %s" % myposition)
+    print("Max. %s" % max_min['ymax'])
+    print("Min. %s" % max_min['ymin'])
+    print("-------------------------")
 
 
 def meascontrol(dirmeas):
@@ -331,7 +331,7 @@ def meascontrol(dirmeas):
     clearfsh.getresults(newlinechar='\r')
     clearfsh.close()
     #
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     print("Config file: ./conf/{}.ini".format(vars['config']))
     config.read("./conf/%s.ini" % (vars['config']))
     threshold = float(config.get("level","threshold"))
@@ -345,8 +345,8 @@ def meascontrol(dirmeas):
     bigfile.close()
     measlogfile.close()
     
-    print "Measurement has completed ..."
-    print "time:%s sec, step: %s sec, span: %s sec" % (vars['time'], vars['sleep'], (end - start))
+    print("Measurement has completed ...")
+    print("time:%s sec, step: %s sec, span: %s sec" % (vars['time'], vars['sleep'], (end - start)))
 
 
 def dirhandling():
