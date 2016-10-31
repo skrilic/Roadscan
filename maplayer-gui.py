@@ -8,12 +8,12 @@ from PySide.QtCore import QThread, SIGNAL
 import os, sys
 import maplayerDesign
 import time
-import ConfigParser
+import configparser
 from string import Template
 
 tmplvar=""
 tmplplacemark= "templates/kmlbody.xml"
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read("conf/kml.ini")
 ptcsv = config.get("webroot","csv")
 ptimg = config.get("webroot","image")

@@ -1,6 +1,7 @@
+pyside
 gpsbabel
 pyserial
-python2-biggles
+#python2-biggles
 pyudev
-folium
-pyrtlsdr
+#folium
+#pyrtlsdr
