@@ -160,9 +160,10 @@ def draw_pyplot(datafile, graphfile, myposition, datetime):
     data = read_datafile(datafile)
     plt.figure(1)
     plt.subplot(111)
-    plt.title("Spectrum for the GPS: %s at Date and Time: %s" % (myposition, datetime))
-    plt.xlabel("Frequency [Hz]")
-    plt.ylabel("Magnitude [dBm]")
+    plt.title('Spectrum for the GPS: %s at Date and Time: %s' % (myposition, datetime),
+              fontsize=12, fontweight='bold')
+    plt.xlabel('Frequency [Hz]', fontsize=12, fontweight='bold')
+    plt.ylabel('Magnitude [dBm]', fontsize=12, fontweight='bold')
     plt.grid(True)
     plt.plot(data['x'], data['y'], color='r', label='the data')
     #plt.show()
