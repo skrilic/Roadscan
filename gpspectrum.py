@@ -7,10 +7,11 @@ from datetime import *
 import time
 import serial
 from optparse import OptionParser
-import biggles
-#import numpy
-#import math
-import ConfigParser
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+import configparser
 #from string import Template
 import os
 
@@ -30,9 +31,10 @@ class ResFile:
     def close(self):
         self.file.close()
 
+
 class Getvar:
     def callexit(self, message_string):
-        print message_string
+        print(message_string)
         exit()
 
     def getvars(self):
@@ -75,7 +77,7 @@ class Getvar:
             self.dirname = options.dir
         else:
             self.dirname = "default"
-            print "Results are going to be stored at $HOME/gpspectrum/data directory"
+            print("Results are going to be stored at $HOME/gpspectrum/data directory")
             #self.callexit("There is not Input directory variable!\r\
             #        For usage, Please type: <program> --help")
         #
@@ -114,27 +116,58 @@ class Getvar:
                  'time': self.time, 'sleep':self.sleep,\
                  'config':self.config}
 
-def draw(datafile, graphfile, fstart, fstop, ymin, ymax, myposition, datetime):
-        #
-        #Take data from CSV file column 0 and 1, Comments in the file started with #
-        x = biggles.read_column ( 0, datafile, float, "#" )
-        y = biggles.read_column ( 1, datafile, float, "#" )
+# def draw(datafile, graphfile, fstart, fstop, ymin, ymax, myposition, datetime):
+#     """
+#     Take data from CSV file column 0 and 1 and Draw the spectrum
+#     :param datafile: This is bigless.tmp file
+#     :param graphfile: Output spectrum Plot file
+#     :param fstart: Start frequency
+#     :param fstop: End/Stop frequency
+#     :param ymin: Min magnitude value
+#     :param ymax: Max magnitude value
+#     :param myposition: GPS read out
+#     :param datetime: Date time stamp for the spectrum at the GPS point
+#     :return:
+#     """
+#     #
+#     #Take data from CSV file column 0 and 1, Comments in the file started with #
+#     x = biggles.read_column ( 0, datafile, float, "#" )
+#     y = biggles.read_column ( 1, datafile, float, "#" )
+#
+#     g = biggles.FramedPlot()
+#     g.xrange = fstart, fstop #ie. 863000000, 870000000 for RFID/SRD
+#     g.yrange = (ymin - 5), (ymax + 5) #-100, -20
+#     #pts = biggles.Points( x, y, type="filled circle", color = "red")
+#     line = biggles.Curve(x, y, color = "blue")
+#     #g.add( pts, line )
+#     g.add( line )
+#     g.xlabel = "Frequency [Hz]"
+#     g.ylabel = "Magnitude [dBm]"
+#     g.title = "Spectrum for the GPS: %s at Date and Time: %s" % (myposition, datetime)
+#     g.frame.draw_grid = 1
+#     #g.add( biggles.LineY(0, type='dot') )
+#     #g.show()
+#     #g.write_img( 1200, 400, "%s" % graphfile )
+#     g.write_img( 900, 300, "%s" % graphfile )
 
-        g = biggles.FramedPlot()
-        g.xrange = fstart, fstop #ie. 863000000, 870000000 for RFID/SRD
-        g.yrange = (ymin - 5), (ymax + 5) #-100, -20
-        #pts = biggles.Points( x, y, type="filled circle", color = "red")
-        line = biggles.Curve(x, y, color = "blue")
-        #g.add( pts, line )
-        g.add( line )
-        g.xlabel = "Frequency [Hz]"
-        g.ylabel = "Magnitude [dBm]"
-        g.title = "Spectrum for the GPS: %s at Date and Time: %s" % (myposition, datetime)
-        g.frame.draw_grid = 1
-        #g.add( biggles.LineY(0, type='dot') )
-        #g.show()
-        #g.write_img( 1200, 400, "%s" % graphfile )
-        g.write_img( 900, 300, "%s" % graphfile )
+def read_datafile(file_name):
+    data = np.genfromtxt(file_name, delimiter=' ', skip_header=0, skip_footer=0, names=['x', 'y'])
+    return data
+
+
+def draw_pyplot(datafile, graphfile, myposition, datetime):
+    data = read_datafile(datafile)
+    plt.figure(1)
+    plt.subplot(111)
+    plt.title('Spectrum for the GPS: %s at Date and Time: %s' % (myposition, datetime),
+              fontsize=12, fontweight='bold')
+    plt.xlabel('Frequency [Hz]', fontsize=12, fontweight='bold')
+    plt.ylabel('Magnitude [dBm]', fontsize=12, fontweight='bold')
+    plt.grid(True)
+    plt.plot(data['x'], data['y'], color='r', label='the data')
+    #plt.show()
+    plt.savefig(graphfile)
+
 
 def latlong(port, type):
     if port == 'off':
@@ -161,17 +194,23 @@ def findpeaks(list):
                 vmin0 = float(v)
     return {'ymax':vmax0, 'ymin':vmin0}
 
+# TODO: Change DATE-TIME format to ISO GMT bigless
 def dt():
+    """
+    Calling this function returns current Local Date and Time
+    :return:
+    """
     nowis=datetime.now()
     dtnow=nowis.strftime("%Y-%m-%d %H:%M:%S")
     return dtnow
+
 
 def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig,threshold):
     """
     Function creates log files for further analysis in a GPS position. For every GPS position
     this function is called to create log and picture specific for that point.
     """
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     config.read("conf/%s.ini" % (fshconfig))
     #
     fstart = float(config.get("frequency","start"))
@@ -226,13 +265,13 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig
     bigglesin.open(csvdirname,"biggles.tmp","a")
     #
     #
-    print "-------------------------"
+    print("-------------------------")
     i = 1
     for rez in results:
         freq = fstart + (i-1)*(fstop - fstart)/stepcount
         #print "%i,%s,%s,%s,%s,%s" % (i,dattim,myposition,rez,csvfile,pngfile
         if rez != '' and rez != ' ':
-            linefull = "%s,%s,%f,%f,%s,%s\r\n" % (dattim,myposition,float(freq),float(rez),csvfile,pngfile)
+            linefull = "%s,%s,%f,%f,%s,%s\r\n" % (dattim, myposition, float(freq), float(rez), csvfile, pngfile)
             line = "%i,%s,%s\r\n" % (i, freq, rez)
             bigglesline = "%s %s\r\n" % (freq, rez)
             #print line
@@ -244,17 +283,19 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig
     bigglesin.close()
     max_min=findpeaks(results)
     if (max_min['ymax'] - threshold) < 0:
-	abovethreshold = 0
+        abovethreshold = 0
     else:
-	abovethreshold = max_min['ymax'] - threshold
-    measlogfile.append("%s,%s,%s,%s,%s\r\n" % (dattim,myposition,abovethreshold,csvfile,pngfile))
+        abovethreshold = max_min['ymax'] - threshold
+        measlogfile.append("%s,%s,%s,%s,%s\r\n" % (dattim, myposition, abovethreshold, csvfile, pngfile))
 
     time.sleep(1)
-    draw( "%s/biggles.tmp" % csvdirname, "%s/%s" % (imagedirname,pngfile), fstart, fstop, max_min['ymin'], max_min['ymax'],myposition, dattim )
-    print "GPS position: %s" % myposition
-    print "Max. %s" % max_min['ymax']
-    print "Min. %s" % max_min['ymin']
-    print "-------------------------"
+    # draw( "%s/biggles.tmp" % csvdirname, "%s/%s" % (imagedirname, pngfile),
+    #       fstart, fstop, max_min['ymin'], max_min['ymax'],myposition, dattim )
+    draw_pyplot("%s/biggles.tmp" % csvdirname, "%s/%s" % (imagedirname, pngfile), myposition, dattim)
+    print("GPS position: %s" % myposition)
+    print("Max. %s" % max_min['ymax'])
+    print("Min. %s" % max_min['ymin'])
+    print("-------------------------")
 
 
 def meascontrol(dirmeas):
@@ -290,7 +331,7 @@ def meascontrol(dirmeas):
     clearfsh.getresults(newlinechar='\r')
     clearfsh.close()
     #
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     print("Config file: ./conf/{}.ini".format(vars['config']))
     config.read("./conf/%s.ini" % (vars['config']))
     threshold = float(config.get("level","threshold"))
@@ -304,8 +345,9 @@ def meascontrol(dirmeas):
     bigfile.close()
     measlogfile.close()
     
-    print "Measurement has completed ..."
-    print "time:%s sec, step: %s sec, span: %s sec" % (vars['time'], vars['sleep'], (end - start))
+    print("Measurement has completed ...")
+    print("time:%s sec, step: %s sec, span: %s sec" % (vars['time'], vars['sleep'], (end - start)))
+
 
 def dirhandling():
     if os.path.isdir("%s/gpspectrum/data" % homedir) != True:
