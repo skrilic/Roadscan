@@ -8,6 +8,9 @@ class Gpsmgr:
     Handling gpsbabel command get_posn. This way it is possible to get latitude,
     longitude and gps time as well.
     """
+    def __init__(self, port, gps_type):
+        self.port = port
+        self.gps_type = gps_type
 
     def setport(self,port):
         self.port = port

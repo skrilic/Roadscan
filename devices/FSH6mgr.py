@@ -1,14 +1,18 @@
 import serial
-import ConfigParser
+import configparser
 import time
 
 __author__="slaven"
 
+
 class FSH6mgr:
-    def connect(self, fshport):
+    def __init__(self, fshport):
+        self.fshport = fshport
+
+    def connect(self):
         self.fsh=serial.Serial()
         ##---DEFINING SERIAL PORT ---
-        self.fsh.port=fshport
+        self.fsh.port=self.fshport
         self.fsh.baudrate=19200
         self.fsh.bytesize=8
         self.fsh.parity='N'
@@ -39,6 +43,7 @@ class FSH6mgr:
         #response
         return
 
+
     def cmd(self,cmd):
         self.fsh.write('CMD\r')
         #response
@@ -46,11 +51,12 @@ class FSH6mgr:
         #response
         return
 
+
     def setmeas( self, fshconfig, reset ):
         """
         Set instrument for specfic data.
         """
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         print("Config file is ./conf/{}.ini".format(fshconfig))
         config.read("./conf/%s.ini" % (fshconfig))
         fstart = float(config.get("frequency","start"))
@@ -79,6 +85,7 @@ class FSH6mgr:
         self.setcmd('RBW,%s\r' % (config.get("bandwidth","resolution")))
         self.setcmd('VBW,%s\r' % (config.get("bandwidth","video")))
         self.getcmd('TRACE\r')
+
 
     def getresults(self, newlinechar):
         spectrum = self.fsh.readline()

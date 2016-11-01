@@ -7,7 +7,6 @@ from datetime import *
 import time
 import serial
 from optparse import OptionParser
-#import biggles
 
 import matplotlib.pyplot as plt
 import numpy as np
