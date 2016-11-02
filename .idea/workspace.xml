@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="405ed95c-59b2-487e-af8e-1628eee5927b" name="Default" comment="Project description refreshed">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <list id="473f15cf-4bb3-4dc6-baa6-1d061d9006fb" name="Rejected commit: Default" comment="Merge branch 'master' of https://github.com/skrilic/gpsdrive&#10;&#10;Conflicts:&#10;&#9;.idea/workspace.xml&#10;" />
     <ignored path="gpspectrum.iws" />
@@ -672,7 +671,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478109921452</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Project description refreshed">
+      <created>1478110559956</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1478110559956</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TestHistory">
