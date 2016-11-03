@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="405ed95c-59b2-487e-af8e-1628eee5927b" name="Default" comment="Add py3-progressbar to requirements.txt, Add threads class for writting files">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+    <list default="true" id="405ed95c-59b2-487e-af8e-1628eee5927b" name="Default" comment="Update requirements&#10;Switch to PyQt4 instead of PySide&#10;...">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/devices/FSH6mgr.py" afterPath="$PROJECT_DIR$/devices/FSH6mgr.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/maplayer-gui.py" afterPath="$PROJECT_DIR$/maplayer-gui.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/maplayerDesign.py" afterPath="$PROJECT_DIR$/maplayerDesign.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
     </list>
     <list id="473f15cf-4bb3-4dc6-baa6-1d061d9006fb" name="Rejected commit: Default" comment="Merge branch 'master' of https://github.com/skrilic/gpsdrive&#10;&#10;Conflicts:&#10;&#9;.idea/workspace.xml&#10;" />
     <ignored path="gpspectrum.iws" />
@@ -674,7 +668,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478182205904</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Update requirements&#10;Switch to PyQt4 instead of PySide&#10;...">
+      <created>1478204232343</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1478204232343</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -751,7 +752,8 @@
     <MESSAGE value="Rename project" />
     <MESSAGE value="Project description refreshed" />
     <MESSAGE value="Add py3-progressbar to requirements.txt, Add threads class for writting files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add py3-progressbar to requirements.txt, Add threads class for writting files" />
+    <MESSAGE value="Update requirements&#10;Switch to PyQt4 instead of PySide&#10;..." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update requirements&#10;Switch to PyQt4 instead of PySide&#10;..." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
