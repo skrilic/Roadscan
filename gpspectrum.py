@@ -7,10 +7,12 @@ from datetime import *
 import time
 from optparse import OptionParser
 
+import matplotlib
+matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 import numpy as np
 
-import configparser
+import ConfigParser as configparser
 #from string import Template
 import os
 import threading
@@ -185,7 +187,7 @@ def dt():
     return dtnow
 
 
-def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig,threshold):
+def onestep(fshport,gpsport,csvdirname,imagedirname,allresfile,measlogfile,fshconfig,threshold):
     """
     Function creates log files for further analysis in a GPS position. For every GPS position
     this function is called to create log and picture specific for that point.
@@ -197,8 +199,8 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig
     fstop = float(config.get("frequency","stop"))
     #
     varreset = config.get("repetition","reset")
-    fsh6 = FSH6()
-    fsh6.connect(fshport)
+    fsh6 = FSH6(fshport)
+    # fsh6.connect(fshport)
     fsh6.setmeas(fshconfig,varreset)
     # If Max-hold mode is required ...
     if config.get("trace","mode") == '2':
@@ -262,13 +264,16 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig
             linefull = "%s,%s,%f,%f,%s,%s\r\n" % (dattim, myposition, float(freq), float(rez), csvfile, pngfile)
             line = "%i,%s,%s\r\n" % (i, freq, rez)
             bigglesline = "%s %s\r\n" % (freq, rez)
-            #print line
-            allres.append(linefull)
+            #print linemeaslog
+            #allresfile.append(linefull)
+            allrf1 = AsyncWrite(allresfile, "a", linefull)
+            allrf1.start()
+
             # meas.append(line)
             # bigglesin.append(bigglesline)
 
             f2 = AsyncWrite("{}/{}".format(csvdirname, csvfile), "a", line)
-            b2 = AsyncWrite("{}/biggles.tmp".format(csvdirname), "w", bigglesline)
+            b2 = AsyncWrite("{}/biggles.tmp".format(csvdirname), "a", bigglesline)
             f2.start()
             b2.start()
         i = i+1
@@ -279,7 +284,9 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig
         abovethreshold = 0
     else:
         abovethreshold = max_min['ymax'] - threshold
-        measlogfile.append("%s,%s,%s,%s,%s\r\n" % (dattim, myposition, abovethreshold, csvfile, pngfile))
+        # measlogfile.append("%s,%s,%s,%s,%s\r\n" % (dattim, myposition, abovethreshold, csvfile, pngfile))
+        mlf1 = AsyncWrite(measlogfile, "a", "%s,%s,%s,%s,%s\r\n" % (dattim, myposition, abovethreshold, csvfile, pngfile))
+        mlf1.start()
 
     time.sleep(1)
     # draw( "%s/biggles.tmp" % csvdirname, "%s/%s" % (imagedirname, pngfile),
@@ -321,15 +328,15 @@ def meascontrol(dirmeas):
     #
     #
     # The File holds only names of detailed measurement files and abovetreshold value
-    measlog = AsyncWrite("{}/total.csv".format(csvdirname), "a",
+    measlog = AsyncWrite("{}/measlog.csv".format(csvdirname), "a",
                          "datetime,latitude,longitude,abovethreshold,csvfile,pngfile\r\n")
     measlog.start()
     # The file holds every measured value and links to the specific detailed files
     allres = AsyncWrite("{}/total.csv".format(csvdirname), "a", "datetime,latitude,longitude,frequency,magnitude,csvfile,pngfile")
     allres.start()
     #
-    clearfsh = FSH6()
-    clearfsh.connect(vars['fshport'])
+    clearfsh = FSH6(vars['fshport'])
+    # clearfsh.connect(vars['fshport'])
     # Read output and do nothing...
     clearfsh.getresults(newlinechar='\r')
     clearfsh.close()
@@ -342,7 +349,7 @@ def meascontrol(dirmeas):
     start = time.time()
     end = start
     while vars['time'] >= (end - start):
-        onestep( vars['fshport'], vars['gpsport'], csvdirname, imagedirname, allres, measlog, vars['config'],threshold)
+        onestep( vars['fshport'], vars['gpsport'], csvdirname, imagedirname, "{}/total.csv".format(csvdirname), "{}/measlog.csv".format(csvdirname), vars['config'],threshold)
         time.sleep(vars['sleep'])
         end = time.time()
     # bigfile.close()

@@ -1,5 +1,5 @@
 import serial
-import configparser
+import ConfigParser as configparser
 import time
 
 __author__="slaven"
@@ -9,7 +9,7 @@ class FSH6mgr:
     def __init__(self, fshport):
         self.fshport = fshport
 
-    def connect(self):
+    #def connect(self):
         self.fsh=serial.Serial()
         ##---DEFINING SERIAL PORT ---
         self.fsh.port=self.fshport
