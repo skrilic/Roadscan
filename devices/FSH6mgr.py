@@ -7,12 +7,10 @@ __author__="slaven"
 
 class FSH6mgr:
     def __init__(self, fshport):
-        self.fshport = fshport
-
-    #def connect(self):
+        # self.fshport = fshport
         self.fsh=serial.Serial()
         ##---DEFINING SERIAL PORT ---
-        self.fsh.port=self.fshport
+        self.fsh.port=fshport
         self.fsh.baudrate=19200
         self.fsh.bytesize=8
         self.fsh.parity='N'

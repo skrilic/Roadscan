@@ -2,8 +2,9 @@ pyside
 gpsbabel
 pyserial
 matplotlib
+stdConfigParser
 #python2-biggles
 pyudev
 #folium
 #pyrtlsdr
-py3-progressbar
+progressbar
