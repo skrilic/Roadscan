@@ -139,7 +139,7 @@ def draw_pyplot(datafile, graphfile, myposition, datetime):
     data = read_datafile(datafile)
     plt.figure(1)
     plt.subplot(111)
-    plt.title('Spectrum for the GPS: %s at Date and Time: %s' % (myposition, datetime),
+    plt.title('GPS: {} Date&Time: {}'.format(myposition, datetime),
               fontsize=12, fontweight='bold')
     plt.xlabel('Frequency [Hz]', fontsize=12, fontweight='bold')
     plt.ylabel('Magnitude [dBm]', fontsize=12, fontweight='bold')
@@ -176,15 +176,29 @@ def findpeaks(list):
                 vmin0 = float(v)
     return {'ymax':vmax0, 'ymin':vmin0}
 
-# TODO: Change DATE-TIME format to ISO GMT bigless
-def dt():
+
+# def dt():
+#     """
+#     Calling this function returns current Local Date and Time
+#     :return:
+#     """
+#     nowis=datetime.now()
+#     dtnow=nowis.strftime("%Y-%m-%d %H:%M:%S")
+#     return dtnow
+
+
+def time_stamp(gmt):
     """
-    Calling this function returns current Local Date and Time
-    :return:
+    Return timestamp for log file and spectrum plot
+    :param gmt: True or False
+    :return: Date-time string
     """
-    nowis=datetime.now()
-    dtnow=nowis.strftime("%Y-%m-%d %H:%M:%S")
-    return dtnow
+    if gmt:
+        dtnow = time.gmtime()
+    else:
+        dtnow = time.localtime()
+
+    return ("{}-{}-{} {}:{}:{}".format(dtnow.tm_year, dtnow.tm_month, dtnow.tm_day, dtnow.tm_hour, dtnow.tm_min, dtnow.tm_sec))
 
 
 def onestep(fshport,gpsport,csvdirname,imagedirname,allresfile,measlogfile,fshconfig,threshold):
@@ -221,7 +235,8 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allresfile,measlogfile,fshco
     else:
         results=fsh6.getresults(newlinechar='\r')
     fsh6.close()
-    dattim = dt()
+    #dattim = dt()
+    dattim = time_stamp(gmt=True)
     
     #myposition = latlong('/dev/ttyUSB0','garmin')
     myposition = latlong(gpsport,'garmin')
@@ -291,7 +306,10 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allresfile,measlogfile,fshco
     time.sleep(1)
     # draw( "%s/biggles.tmp" % csvdirname, "%s/%s" % (imagedirname, pngfile),
     #       fstart, fstop, max_min['ymin'], max_min['ymax'],myposition, dattim )
-    draw_pyplot("%s/biggles.tmp" % csvdirname, "%s/%s" % (imagedirname, pngfile), myposition, dattim)
+    #draw_pyplot("%s/biggles.tmp" % csvdirname, "%s/%s" % (imagedirname, pngfile), myposition, dattim)
+    draw_thread = threading.Thread(target=draw_pyplot, args=("{}/biggles.tmp".format(csvdirname), "{}/{}".format(imagedirname, pngfile), myposition, dattim))
+    draw_thread.start()
+
     print("GPS position: %s" % myposition)
     print("Max. %s" % max_min['ymax'])
     print("Min. %s" % max_min['ymin'])
@@ -307,7 +325,8 @@ def meascontrol(dirmeas):
             dirname = "%s/data" % dirmeas
     # Open up file with stored GPS points of measurement, date and time of measurements,
     # and names of files where measurements are stored
-    datetimestring = dt().replace(':', '-').replace(' ','_')
+    # datetimestring = dt().replace(':', '-').replace(' ','_')
+    datetimestring = time_stamp(gmt=True).replace(':', '-').replace(' ','_')
     csvdirname = "%s/%s/csv" % (dirname,datetimestring)
     imagedirname = "%s/%s/image" % (dirname,datetimestring)
     os.makedirs(csvdirname)
