@@ -145,6 +145,8 @@ def draw_pyplot(datafile, graphfile, myposition, datetime):
     plt.plot(data['x'], data['y'], color='r', label='the data')
     #plt.show()
     plt.savefig(graphfile)
+    # Clear current figure and prepare for the next scan...
+    plt.clf()
 
 
 def latlong(port, type):

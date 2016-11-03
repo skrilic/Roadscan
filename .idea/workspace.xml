@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="405ed95c-59b2-487e-af8e-1628eee5927b" name="Default" comment="Project description refreshed">
+    <list default="true" id="405ed95c-59b2-487e-af8e-1628eee5927b" name="Default" comment="Add py3-progressbar to requirements.txt, Add threads class for writting files">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gpspectrum.py" afterPath="$PROJECT_DIR$/gpspectrum.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
     </list>
     <list id="473f15cf-4bb3-4dc6-baa6-1d061d9006fb" name="Rejected commit: Default" comment="Merge branch 'master' of https://github.com/skrilic/gpsdrive&#10;&#10;Conflicts:&#10;&#9;.idea/workspace.xml&#10;" />
     <ignored path="gpspectrum.iws" />
@@ -38,8 +37,8 @@
       <file leaf-file-name="gpspectrum.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gpspectrum.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="478">
-              <caret line="347" column="4" selection-start-line="347" selection-start-column="4" selection-end-line="347" selection-end-column="4" />
+            <state relative-caret-position="289">
+              <caret line="141" column="34" selection-start-line="141" selection-start-column="34" selection-end-line="141" selection-end-column="34" />
               <folding>
                 <element signature="e#77#99#0" expanded="true" />
               </folding>
@@ -702,7 +701,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478110576707</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Add py3-progressbar to requirements.txt, Add threads class for writting files">
+      <created>1478182205904</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1478182205904</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -771,7 +777,8 @@
     <MESSAGE value="..." />
     <MESSAGE value="Rename project" />
     <MESSAGE value="Project description refreshed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Project description refreshed" />
+    <MESSAGE value="Add py3-progressbar to requirements.txt, Add threads class for writting files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add py3-progressbar to requirements.txt, Add threads class for writting files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1082,8 +1089,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gpspectrum.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="478">
-          <caret line="347" column="4" selection-start-line="347" selection-start-column="4" selection-end-line="347" selection-end-column="4" />
+        <state relative-caret-position="289">
+          <caret line="141" column="34" selection-start-line="141" selection-start-column="34" selection-end-line="141" selection-end-column="34" />
           <folding>
             <element signature="e#77#99#0" expanded="true" />
           </folding>
