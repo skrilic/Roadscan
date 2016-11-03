@@ -5,7 +5,6 @@ __date__ ="$22.05.2010. 21:25:40$"
 
 from datetime import *
 import time
-import serial
 from optparse import OptionParser
 
 import matplotlib.pyplot as plt
@@ -14,6 +13,7 @@ import numpy as np
 import configparser
 #from string import Template
 import os
+import threading
 
 from devices.Gpsmgr import Gpsmgr as Gpsmgr
 from devices.FSH6mgr import FSH6mgr as FSH6
@@ -30,6 +30,18 @@ class ResFile:
 
     def close(self):
         self.file.close()
+
+class AsyncWrite(threading.Thread):
+    def __init__(self, output_file, file_mode, text):
+        threading.Thread.__init__(self)
+        self.output_file = output_file
+        self.file_mode = file_mode
+        self.text = text
+
+    def run(self):
+        f = open(self.output_file, self.file_mode)
+        f.write(self.text)
+        f.close()
 
 
 class Getvar:
@@ -115,40 +127,6 @@ class Getvar:
                  'dirname':self.dirname,\
                  'time': self.time, 'sleep':self.sleep,\
                  'config':self.config}
-
-# def draw(datafile, graphfile, fstart, fstop, ymin, ymax, myposition, datetime):
-#     """
-#     Take data from CSV file column 0 and 1 and Draw the spectrum
-#     :param datafile: This is bigless.tmp file
-#     :param graphfile: Output spectrum Plot file
-#     :param fstart: Start frequency
-#     :param fstop: End/Stop frequency
-#     :param ymin: Min magnitude value
-#     :param ymax: Max magnitude value
-#     :param myposition: GPS read out
-#     :param datetime: Date time stamp for the spectrum at the GPS point
-#     :return:
-#     """
-#     #
-#     #Take data from CSV file column 0 and 1, Comments in the file started with #
-#     x = biggles.read_column ( 0, datafile, float, "#" )
-#     y = biggles.read_column ( 1, datafile, float, "#" )
-#
-#     g = biggles.FramedPlot()
-#     g.xrange = fstart, fstop #ie. 863000000, 870000000 for RFID/SRD
-#     g.yrange = (ymin - 5), (ymax + 5) #-100, -20
-#     #pts = biggles.Points( x, y, type="filled circle", color = "red")
-#     line = biggles.Curve(x, y, color = "blue")
-#     #g.add( pts, line )
-#     g.add( line )
-#     g.xlabel = "Frequency [Hz]"
-#     g.ylabel = "Magnitude [dBm]"
-#     g.title = "Spectrum for the GPS: %s at Date and Time: %s" % (myposition, datetime)
-#     g.frame.draw_grid = 1
-#     #g.add( biggles.LineY(0, type='dot') )
-#     #g.show()
-#     #g.write_img( 1200, 400, "%s" % graphfile )
-#     g.write_img( 900, 300, "%s" % graphfile )
 
 def read_datafile(file_name):
     data = np.genfromtxt(file_name, delimiter=' ', skip_header=0, skip_footer=0, names=['x', 'y'])
@@ -249,20 +227,28 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig
     pngfile = "%s.png" % filename_base
     #
     # First, make sure the file is created, or cleared if already exists...
-    fileout = ResFile()
-    fileout.open(csvdirname, csvfile, "w")
-    fileout.close
+    # fileout = ResFile()
+    # fileout.open(csvdirname, csvfile, "w")
+    # fileout.close
+
     #
     # Open file with results for all GPS locations ...
 
     # And temporary file for Biggles graph ...
-    bigglesin = ResFile()
-    bigglesin.open(csvdirname,"biggles.tmp","w")
-    bigglesin.close()
+    # bigglesin = ResFile()
+    # bigglesin.open(csvdirname,"biggles.tmp","w")
+    # bigglesin.close()
+    #
+    # JUST CREATE FILES
+    f1 = AsyncWrite("{}/{}".format(csvdirname, csvfile), "w", "")
+    b1 = AsyncWrite("{}/biggles.tmp".format(csvdirname), "w", "")
+    f1.start()
+    b1.start()
+
     # Then the file is ready for results gathering ...
-    meas = ResFile()
-    meas.open(csvdirname, csvfile, "a")
-    bigglesin.open(csvdirname,"biggles.tmp","a")
+    # meas = ResFile()
+    # meas.open(csvdirname, csvfile, "a")
+    # bigglesin.open(csvdirname,"biggles.tmp","a")
     #
     #
     print("-------------------------")
@@ -276,11 +262,16 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allres,measlogfile,fshconfig
             bigglesline = "%s %s\r\n" % (freq, rez)
             #print line
             allres.append(linefull)
-            meas.append(line)
-            bigglesin.append(bigglesline)
+            # meas.append(line)
+            # bigglesin.append(bigglesline)
+
+            f2 = AsyncWrite("{}/{}".format(csvdirname, csvfile), "a", line)
+            b2 = AsyncWrite("{}/biggles.tmp".format(csvdirname), "w", bigglesline)
+            f2.start()
+            b2.start()
         i = i+1
-    meas.close()
-    bigglesin.close()
+    # meas.close()
+    # bigglesin.close()
     max_min=findpeaks(results)
     if (max_min['ymax'] - threshold) < 0:
         abovethreshold = 0
@@ -314,16 +305,26 @@ def meascontrol(dirmeas):
     os.makedirs(imagedirname)
     #
     # Open up file for storing measured values for a GPS point ...
-    measlogfile = ResFile()
-    measlogfile.open(csvdirname, "measlog.csv", "a")
-    # And write the table header ...
-    measlogfile.append("datetime,latitude,longitude,abovethreshold,csvfile,pngfile\r\n")
+    # measlogfile = ResFile()
+    # measlogfile.open(csvdirname, "measlog.csv", "a")
+    # # And write the table header ...
+    # measlogfile.append("datetime,latitude,longitude,abovethreshold,csvfile,pngfile\r\n")
+
     #
     # Open up file for storing all measured results from whole path (GPS locations)
-    bigfile = ResFile()
-    bigfile.open(csvdirname, "total.csv", "a")
-    #First line is populated by names of columns
-    bigfile.append("datetime,latitude,longitude,frequency,magnitude,csvfile,pngfile")
+    # bigfile = ResFile()
+    # bigfile.open(csvdirname, "total.csv", "a")
+    # #First line is populated by names of columns
+    # bigfile.append("datetime,latitude,longitude,frequency,magnitude,csvfile,pngfile")
+    #
+    #
+    # The File holds only names of detailed measurement files and abovetreshold value
+    measlog = AsyncWrite("{}/total.csv".format(csvdirname), "a",
+                         "datetime,latitude,longitude,abovethreshold,csvfile,pngfile\r\n")
+    measlog.start()
+    # The file holds every measured value and links to the specific detailed files
+    allres = AsyncWrite("{}/total.csv".format(csvdirname), "a", "datetime,latitude,longitude,frequency,magnitude,csvfile,pngfile")
+    allres.start()
     #
     clearfsh = FSH6()
     clearfsh.connect(vars['fshport'])
@@ -339,11 +340,11 @@ def meascontrol(dirmeas):
     start = time.time()
     end = start
     while vars['time'] >= (end - start):
-        onestep( vars['fshport'], vars['gpsport'], csvdirname, imagedirname, bigfile, measlogfile, vars['config'],threshold)
+        onestep( vars['fshport'], vars['gpsport'], csvdirname, imagedirname, allres, measlog, vars['config'],threshold)
         time.sleep(vars['sleep'])
         end = time.time()
-    bigfile.close()
-    measlogfile.close()
+    # bigfile.close()
+    # measlogfile.close()
     
     print("Measurement has completed ...")
     print("time:%s sec, step: %s sec, span: %s sec" % (vars['time'], vars['sleep'], (end - start)))

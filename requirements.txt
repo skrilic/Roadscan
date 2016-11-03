@@ -6,3 +6,4 @@ matplotlib
 pyudev
 #folium
 #pyrtlsdr
+py3-progressbar
