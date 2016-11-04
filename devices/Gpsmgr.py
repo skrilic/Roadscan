@@ -12,16 +12,16 @@ class Gpsmgr:
         self.port = port
         self.gps_type = gps_type
 
-    def setport(self,port):
-        self.port = port
+    # def setport(self,port):
+    #     self.port = port
+    #
+    # def setgpstype(self, gpsType):
+    #     self.gpsType = gpsType
 
-    def setgpstype(self, gpsType):
-        self.gpsType = gpsType
 
-
-    def getpos(self):
+    # def getpos(self):
         gpsbbl=gpsbabel.GPSBabel()
-        position=gpsbbl.getCurrentGpsLocation(self.port,self.gpsType)
+        position=gpsbbl.getCurrentGpsLocation(self.port, self.gps_type)
         for element in position:
             elm=element.split(' ')
             if elm[0] == '<None':
@@ -31,7 +31,7 @@ class Gpsmgr:
 
     def getgpstime(self):
         gpsbbl=gpsbabel.GPSBabel()
-        position=gpsbbl.getCurrentGpsLocation(self.port,self.gpsType)
+        position=gpsbbl.getCurrentGpsLocation(self.port, self.gps_type)
         for element in position:
             if element.find('<time>') != -1:
                 datetime=element.strip('<time>').strip('</time>')
