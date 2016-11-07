@@ -1,6 +1,11 @@
 from FSH6 import FSH6
 import ConfigParser as configparser
 from optparse import OptionParser
+
+# import matplotlib
+# matplotlib.use('vga')
+import matplotlib.pyplot as plt
+
 import time
 
 
@@ -26,10 +31,10 @@ class Getvar:
                           help="Full path to the name of instrument configuration file to use", metavar="CONFIGURATION")
 
         parser.add_option("-t", "--time", type="string", dest="time",
-                          help="How long should measurement last? (Default: 60 sec)", metavar="TIME")
+                          help="How long should measurement last? (Default: 10 sec)", metavar="TIME")
 
         parser.add_option("-s", "--sleep", type="string", dest="sleep",
-                          help="SECONDS betweens two consecutive measurements. (Default: 10 sec)", metavar="SECONDS")
+                          help="SECONDS betweens two consecutive measurements. (Default: 1 sec)", metavar="SECONDS")
 
         # parser.add_option("-q", "--sqlitedb", type="string", dest="sqldb",
         #                   help="The name of output SQLite database", metavar="SQLITEDB")
@@ -63,12 +68,12 @@ class Getvar:
         if options.time:
             self.time = float(options.time)
         else:
-            self.time = 60
+            self.time = 10
         #
         if options.sleep:
             self.sleep = float(options.sleep)
         else:
-            self.sleep = 10
+            self.sleep = 1
         #
         # if options.sqldb:
         #     sqlitedb = options.sqldb
@@ -85,7 +90,7 @@ class Getvar:
         # if os.path.exists("%s" % sqlitedb):
         #    os.remove("%s" % sqlitedb)
         #
-        return {'fshport': self.fshport, 'gpsport': self.gpsport, \
+        return {'fshport': self.fshport,\
                 'dirname': self.dirname, \
                 'time': self.time, 'sleep': self.sleep, \
                 'config': self.config}
@@ -103,18 +108,19 @@ def connect(fsh6port):
 
 
 # Initialize measurement
-def init_measurement(port, measurement_config_file, reset):
+def init_measurement(port, measurement_config_file):
     """
     Set instrument for specfic data.
     """
     fsh6 = connect(port)
     config = configparser.ConfigParser()
-    print("Config file is {}.ini".format(measurement_config_file))
-    config.read("{}.ini".format(measurement_config_file))
+    print("Config file is {}".format(measurement_config_file))
+    config.read("{}".format(measurement_config_file))
 
     measurement_config = {
         'fstart': float(config.get("frequency", "start")),
         'fstop': float(config.get("frequency", "stop")),
+        'repetition_reset': float(config.get("repetition", "reset")),
         'sweep_time': config.get("sweep", "time"),
         'sweep_continous': config.get("sweep", "continous"),
         'measurement_unit': config.get("unit", "unit"),
@@ -124,36 +130,94 @@ def init_measurement(port, measurement_config_file, reset):
         'rbw': config.get("bandwidth", "resolution"),
         'vbw': config.get("bandwidth", "video")
     }
-    fsh6.setmeas(measurement_config, reset)
+    fsh6.setmeas(measurement_config)
     return fsh6
 
+def time_stamp(gmt):
+    """
+    Return timestamp for log file and spectrum plot
+    :param gmt: True or False
+    :return: Date-time string
+    """
+    if gmt:
+        dtnow = time.gmtime()
+    else:
+        dtnow = time.localtime()
+
+    return ("{}-{}-{} {}:{}:{}".format(dtnow.tm_year, dtnow.tm_mon, dtnow.tm_mday, dtnow.tm_hour, dtnow.tm_min, dtnow.tm_sec))
 
 # Perform measurement
 def measurement(fsh6):
     results = fsh6.getresults(newlinechar='\r')
     return results
 
+def draw_pyplot(frequencies, results, datetime):
+    datax = frequencies
+    datay = results
+    plt.ion()
+    plt.figure(1)
+    plt.subplot(111)
+    # # Clear current figure and prepare for the next scan...
+    # plt.clf()
+    # #---------#
+    plt.title('GMT: {}'.format(datetime),
+              fontsize=12, fontweight='bold')
+    plt.xlabel('Frequency [Hz]', fontsize=12, fontweight='bold')
+    plt.ylabel('Magnitude [dBm]', fontsize=12, fontweight='bold')
+    plt.grid(True)
+    plt.plot(datax, datay, color='r', label='the data')
+    plt.draw()
+    #plt.show(block=True)
+    # plt.savefig(graphfile)
+
 
 def main():
+
     vars = Getvar().getvars()
 
-    print("Config file: {}.ini".format(vars['config']))
+    print("Config file: {}".format(vars['config']))
     port = vars['fshport']
-    measurement_config_file = "{}.ini".format(vars['config'])
+    measurement_config_file = "{}".format(vars['config'])
+
+    config = configparser.ConfigParser()
+    config.read("{}".format(measurement_config_file))
     #
-    fsh6 = init_measurement(port, measurement_config_file, 1)
+    #fsh6 = init_measurement(port, measurement_config_file)
+    frequencies = list()
+    fstart = float(config.get("frequency", "start"))
+    fstop = float(config.get("frequency", "stop"))
+    for i in range(300):
+        frequencies.append(fstart + i * (fstop-fstart) / 301)
     counter = 0
     start = time.time()
     end = start
+    last_draw = False
     while vars['time'] >= (end - start):
+        fsh6 = init_measurement(port, measurement_config_file)
         results = measurement(fsh6)
-        print(results)
-        # Draw spectrum
+        #
+        # For FSH6 length of correct buffer is 301
+        # Skip the first measurement, to get rid of FSH6 residual buffer (from previous measurement)
+        #
+        if len(results) == 301 and counter > 0:
+            print(len(results))
+            levels = list()
+            for magnitude in results:
+                if magnitude != '':
+                    levels.append(float(magnitude))
+            print("Progress time: {}secs of {}secs".format(int(end - start), vars['time']))
+            draw_pyplot(frequencies, levels, time_stamp(True))
         time.sleep(vars['sleep'])
         end = time.time()
         counter += 1
-
+    # And one more time to clear the buffer
+    #
+    fsh6.close()
     print("Measurement has completed ...")
     print("time:%s sec, step: %s sec, span: %s sec" % (vars['time'], vars['sleep'], (end - start)))
+
+
+if __name__ == '__main__':
+    main()
 
 
