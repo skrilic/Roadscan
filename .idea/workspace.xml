@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="405ed95c-59b2-487e-af8e-1628eee5927b" name="Default" comment="Update requirements&#10;Switch to PyQt4 instead of PySide&#10;...">
+    <list default="true" id="405ed95c-59b2-487e-af8e-1628eee5927b" name="Default" comment="Works nothing!!!">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/devices/Gpsmgr.py" afterPath="$PROJECT_DIR$/devices/Gpsmgr.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gpspectrum.py" afterPath="$PROJECT_DIR$/gpspectrum.py" />
     </list>
     <list id="473f15cf-4bb3-4dc6-baa6-1d061d9006fb" name="Rejected commit: Default" comment="Merge branch 'master' of https://github.com/skrilic/gpsdrive&#10;&#10;Conflicts:&#10;&#9;.idea/workspace.xml&#10;" />
     <ignored path="gpspectrum.iws" />
@@ -181,10 +179,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-2" />
-    <option name="y" value="-3" />
-    <option name="width" value="804" />
-    <option name="height" value="580" />
+    <option name="x" value="92" />
+    <option name="width" value="1389" />
+    <option name="height" value="868" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -230,7 +227,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -293,7 +290,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -748,7 +745,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478204243603</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Works nothing!!!">
+      <created>1478269431319</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1478269431319</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -772,10 +776,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="804" height="580" extended-state="6" />
+    <frame x="92" y="0" width="1389" height="868" extended-state="4" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27086008" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27052787" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -826,7 +830,8 @@
     <MESSAGE value="Project description refreshed" />
     <MESSAGE value="Add py3-progressbar to requirements.txt, Add threads class for writting files" />
     <MESSAGE value="Update requirements&#10;Switch to PyQt4 instead of PySide&#10;..." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update requirements&#10;Switch to PyQt4 instead of PySide&#10;..." />
+    <MESSAGE value="Works nothing!!!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Works nothing!!!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
