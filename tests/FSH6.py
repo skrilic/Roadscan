@@ -29,7 +29,7 @@ class FSH6:
     def getcmd(self,cmd):
         self.fsh.write('GET\r')
         #response
-        self.fsh.write('{}' % cmd)
+        self.fsh.write('{}'.format(cmd))
         #response
         return
 
@@ -37,7 +37,7 @@ class FSH6:
     def setcmd(self,cmd):
         self.fsh.write('SET\r')
         #response
-        self.fsh.write('{}' % cmd)
+        self.fsh.write('{}'.format(cmd))
         #response
         return
 
@@ -45,16 +45,18 @@ class FSH6:
     def cmd(self,cmd):
         self.fsh.write('CMD\r')
         #response
-        self.fsh.write('{}\r' % cmd)
+        self.fsh.write('{}\r'.format(cmd))
         #response
         return
 
+    def cmd_rest(self):
+        self.cmd('PRESET\r')
 
-    def setmeas( self, fshconfig, reset ):
+    def setmeas( self, fshconfig):
         """
         Set instrument for specfic data.
         """
-
+        reset = int(fshconfig['repetition_reset'])
         fstart = float(fshconfig['fstart'])
         fstop = float(fshconfig['fstop'])
 
@@ -66,8 +68,8 @@ class FSH6:
         if reset:
             self.cmd('PRESET\r')
             time.sleep(1)
-        self.setcmd('FREQ,{}\r' % freqcentral)
-        self.setcmd('SPAN,{}\r' % freqspan)
+        self.setcmd('FREQ,{}\r'.format(freqcentral))
+        self.setcmd('SPAN,{}\r'.format(freqspan))
         self.setcmd('SWPTIME,{}\r'.format(fshconfig['sweep_time']))
         self.setcmd('SWPCONT,{}\r'.format(fshconfig['sweep_continous']))
         #self.cmd('INIT\r') #Initialize sweep
