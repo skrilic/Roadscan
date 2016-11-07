@@ -8,6 +8,17 @@ import matplotlib.pyplot as plt
 
 import time
 
+magnitude_unit = {
+    '0': 'dBm',
+    '1': 'dBmV',
+    '2': 'dBuV',
+    '3': 'dBuV/m',
+    '4': 'dBuA/m',
+    '5': 'dB',
+    '6': 'Volt',
+    '7': 'Watt',
+    '8': 'V/m'
+}
 
 # Read command line options
 class Getvar:
@@ -151,7 +162,7 @@ def measurement(fsh6):
     results = fsh6.getresults(newlinechar='\r')
     return results
 
-def draw_pyplot(frequencies, results, datetime):
+def draw_pyplot(frequencies, results, datetime, magn_unit):
     datax = frequencies
     datay = results
     plt.ion()
@@ -163,7 +174,7 @@ def draw_pyplot(frequencies, results, datetime):
     plt.title('GMT: {}'.format(datetime),
               fontsize=12, fontweight='bold')
     plt.xlabel('Frequency [Hz]', fontsize=12, fontweight='bold')
-    plt.ylabel('Magnitude [dBm]', fontsize=12, fontweight='bold')
+    plt.ylabel('Magnitude [{}]'.format(magnitude_unit[magn_unit]), fontsize=12, fontweight='bold')
     plt.grid(True)
     plt.plot(datax, datay, color='r', label='the data')
     plt.draw()
@@ -186,6 +197,8 @@ def main():
     frequencies = list()
     fstart = float(config.get("frequency", "start"))
     fstop = float(config.get("frequency", "stop"))
+    magn_unit = config.get("unit", "unit")
+
     for i in range(300):
         frequencies.append(fstart + i * (fstop-fstart) / 301)
     counter = 0
@@ -206,7 +219,7 @@ def main():
                 if magnitude != '':
                     levels.append(float(magnitude))
             print("Progress time: {}secs of {}secs".format(int(end - start), vars['time']))
-            draw_pyplot(frequencies, levels, time_stamp(True))
+            draw_pyplot(frequencies, levels, time_stamp(True), magn_unit)
         time.sleep(vars['sleep'])
         end = time.time()
         counter += 1
