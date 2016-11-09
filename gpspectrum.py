@@ -60,7 +60,7 @@ class Getvar:
                             help='On which PORT is GPS device connected? Type "off" for disabling GPS.', metavar="GPSPORT")
 
         parser.add_option("-d", "--directory", type="string", dest="dir",
-                            help="create CSV files in the DIRECTORY", metavar="DIRECTORY")
+                            help="Measurement CSV and Plots files go in the DIRECTORY", metavar="DIRECTORY")
       
         parser.add_option("-c", "--config", type="string", dest="config",
                           help="The name of the instrument configuration file to use", metavar="CONFIGURATION")
@@ -91,9 +91,9 @@ class Getvar:
             self.dirname = options.dir
         else:
             self.dirname = "default"
-            print("Results are going to be stored at $HOME/gpspectrum/data directory")
-            #self.callexit("There is not Input directory variable!\r\
-            #        For usage, Please type: <program> --help")
+            #print("Results are going to be stored at $HOME/gpspectrum/data directory")
+            self.callexit("The data otput directory variable missing!\r\
+                   For usage, Please type: <program> --help")
         #
         if options.config:
             self.config = options.config
@@ -109,15 +109,15 @@ class Getvar:
             self.sleep = float(options.sleep)
         else:
             self.sleep = 10
-        """
-        if options.sqldb:
-            sqlitedb = options.sqldb
-        else:
-            sqlitedb = 'none'
-            print "No sqlitedb. Never mind for now, it is OK!"
-            #callexit("There is not output SQLite database variable!\r\
-            #        For usage, Please type: <program> --help")
-        """
+        #
+        # if options.sqldb:
+        #     sqlitedb = options.sqldb
+        # else:
+        #     sqlitedb = 'none'
+        #     print "No sqlitedb. Never mind for now, it is OK!"
+        #     #callexit("There is not output SQLite database variable!\r\
+        #     #        For usage, Please type: <program> --help")
+        #
         # Remove previous output file if such exists...
         #if os.path.exists("%s" % ofile):
         #    os.remove("%s" % ofile)
@@ -139,7 +139,9 @@ def draw_pyplot(datafile, graphfile, myposition, datetime):
     data = read_datafile(datafile)
     plt.figure(1)
     plt.subplot(111)
-    plt.title('GPS: {} Date&Time: {}'.format(myposition, datetime),
+    # Clear current figure and prepare for the next scan...
+    plt.clf()
+    plt.title('GPS: {}  GMT: {}'.format(myposition, datetime),
               fontsize=12, fontweight='bold')
     plt.xlabel('Frequency [Hz]', fontsize=12, fontweight='bold')
     plt.ylabel('Magnitude [dBm]', fontsize=12, fontweight='bold')
@@ -147,23 +149,23 @@ def draw_pyplot(datafile, graphfile, myposition, datetime):
     plt.plot(data['x'], data['y'], color='r', label='the data')
     #plt.show()
     plt.savefig(graphfile)
-    # Clear current figure and prepare for the next scan...
-    plt.clf()
 
 
 def latlong(port, type):
     if port == 'off':
         mylocation = "0.000000,0.000000"
     else:
-        mygps = Gpsmgr()
-        mygps.setport(port)
-        mygps.setgpstype(type)
+        mygps = Gpsmgr(port, type)
+        # mygps.setport(port)
+        # mygps.setgpstype(type)
         try:
             mylocation=mygps.getpos()
+            print("i read location: {} ".format(mylocation))
         except:
-            mylocation("0.000000,0.000000")
+            mylocation = "0.000000,0.000000"
         #gpstime=mygps.getgpstime()
     return mylocation
+
 
 def findpeaks(list):
     vmax0=float(list[0])
@@ -177,16 +179,6 @@ def findpeaks(list):
     return {'ymax':vmax0, 'ymin':vmin0}
 
 
-# def dt():
-#     """
-#     Calling this function returns current Local Date and Time
-#     :return:
-#     """
-#     nowis=datetime.now()
-#     dtnow=nowis.strftime("%Y-%m-%d %H:%M:%S")
-#     return dtnow
-
-
 def time_stamp(gmt):
     """
     Return timestamp for log file and spectrum plot
@@ -198,10 +190,10 @@ def time_stamp(gmt):
     else:
         dtnow = time.localtime()
 
-    return ("{}-{}-{} {}:{}:{}".format(dtnow.tm_year, dtnow.tm_month, dtnow.tm_day, dtnow.tm_hour, dtnow.tm_min, dtnow.tm_sec))
+    return ("{}-{}-{} {}:{}:{}".format(dtnow.tm_year, dtnow.tm_mon, dtnow.tm_mday, dtnow.tm_hour, dtnow.tm_min, dtnow.tm_sec))
 
 
-def onestep(fshport,gpsport,csvdirname,imagedirname,allresfile,measlogfile,fshconfig,threshold):
+def onestep(fshport,gpsport,csvdirname,imagedirname,allresfile,measlogfile,fshconfig,threshold,counter):
     """
     Function creates log files for further analysis in a GPS position. For every GPS position
     this function is called to create log and picture specific for that point.
@@ -214,8 +206,15 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allresfile,measlogfile,fshco
     #
     varreset = config.get("repetition","reset")
     fsh6 = FSH6(fshport)
-    # fsh6.connect(fshport)
     fsh6.setmeas(fshconfig,varreset)
+
+    # If this is first cycle then clear the buffer ... and do nothing with it.
+    if counter == 0:
+        fsh6.getresults(newlinechar='\r')
+        # Wait for new buffer ...
+        time.sleep(0.1)
+        results = fsh6.getresults(newlinechar='\r')
+
     # If Max-hold mode is required ...
     if config.get("trace","mode") == '2':
         cycle = float(config.get("repetition","cycle"))
@@ -235,10 +234,8 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allresfile,measlogfile,fshco
     else:
         results=fsh6.getresults(newlinechar='\r')
     fsh6.close()
-    #dattim = dt()
     dattim = time_stamp(gmt=True)
-    
-    #myposition = latlong('/dev/ttyUSB0','garmin')
+
     myposition = latlong(gpsport,'garmin')
     stepcount  = (len(results) - 1)
     filename_base = dattim.replace(':', '-').replace(' ','_')
@@ -246,17 +243,8 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allresfile,measlogfile,fshco
     pngfile = "%s.png" % filename_base
     #
     # First, make sure the file is created, or cleared if already exists...
-    # fileout = ResFile()
-    # fileout.open(csvdirname, csvfile, "w")
-    # fileout.close
-
-    #
     # Open file with results for all GPS locations ...
-
     # And temporary file for Biggles graph ...
-    # bigglesin = ResFile()
-    # bigglesin.open(csvdirname,"biggles.tmp","w")
-    # bigglesin.close()
     #
     # JUST CREATE FILES
     f1 = AsyncWrite("{}/{}".format(csvdirname, csvfile), "w", "")
@@ -265,48 +253,37 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allresfile,measlogfile,fshco
     b1.start()
 
     # Then the file is ready for results gathering ...
-    # meas = ResFile()
-    # meas.open(csvdirname, csvfile, "a")
-    # bigglesin.open(csvdirname,"biggles.tmp","a")
-    #
-    #
+
     print("-------------------------")
+
+    # How many steps there is?
+    #if stepcount > 0:
     i = 1
     for rez in results:
         freq = fstart + (i-1)*(fstop - fstart)/stepcount
-        #print "%i,%s,%s,%s,%s,%s" % (i,dattim,myposition,rez,csvfile,pngfile
         if rez != '' and rez != ' ':
             linefull = "%s,%s,%f,%f,%s,%s\r\n" % (dattim, myposition, float(freq), float(rez), csvfile, pngfile)
             line = "%i,%s,%s\r\n" % (i, freq, rez)
             bigglesline = "%s %s\r\n" % (freq, rez)
-            #print linemeaslog
-            #allresfile.append(linefull)
             allrf1 = AsyncWrite(allresfile, "a", linefull)
             allrf1.start()
-
-            # meas.append(line)
-            # bigglesin.append(bigglesline)
 
             f2 = AsyncWrite("{}/{}".format(csvdirname, csvfile), "a", line)
             b2 = AsyncWrite("{}/biggles.tmp".format(csvdirname), "a", bigglesline)
             f2.start()
             b2.start()
         i = i+1
-    # meas.close()
-    # bigglesin.close()
+    print(results)
     max_min=findpeaks(results)
     if (max_min['ymax'] - threshold) < 0:
         abovethreshold = 0
     else:
         abovethreshold = max_min['ymax'] - threshold
-        # measlogfile.append("%s,%s,%s,%s,%s\r\n" % (dattim, myposition, abovethreshold, csvfile, pngfile))
         mlf1 = AsyncWrite(measlogfile, "a", "%s,%s,%s,%s,%s\r\n" % (dattim, myposition, abovethreshold, csvfile, pngfile))
         mlf1.start()
 
     time.sleep(1)
-    # draw( "%s/biggles.tmp" % csvdirname, "%s/%s" % (imagedirname, pngfile),
-    #       fstart, fstop, max_min['ymin'], max_min['ymax'],myposition, dattim )
-    #draw_pyplot("%s/biggles.tmp" % csvdirname, "%s/%s" % (imagedirname, pngfile), myposition, dattim)
+
     draw_thread = threading.Thread(target=draw_pyplot, args=("{}/biggles.tmp".format(csvdirname), "{}/{}".format(imagedirname, pngfile), myposition, dattim))
     draw_thread.start()
 
@@ -316,16 +293,12 @@ def onestep(fshport,gpsport,csvdirname,imagedirname,allresfile,measlogfile,fshco
     print("-------------------------")
 
 
-def meascontrol(dirmeas):
+def meascontrol():
     variables = Getvar()
     vars = variables.getvars()
-    if vars['dirname'] != 'default':
-            dirname = vars['dirname']
-    else:
-            dirname = "%s/data" % dirmeas
     # Open up file with stored GPS points of measurement, date and time of measurements,
     # and names of files where measurements are stored
-    # datetimestring = dt().replace(':', '-').replace(' ','_')
+    dirname = vars['dirname']
     datetimestring = time_stamp(gmt=True).replace(':', '-').replace(' ','_')
     csvdirname = "%s/%s/csv" % (dirname,datetimestring)
     imagedirname = "%s/%s/image" % (dirname,datetimestring)
@@ -333,19 +306,10 @@ def meascontrol(dirmeas):
     os.makedirs(imagedirname)
     #
     # Open up file for storing measured values for a GPS point ...
-    # measlogfile = ResFile()
-    # measlogfile.open(csvdirname, "measlog.csv", "a")
     # # And write the table header ...
-    # measlogfile.append("datetime,latitude,longitude,abovethreshold,csvfile,pngfile\r\n")
-
     #
     # Open up file for storing all measured results from whole path (GPS locations)
-    # bigfile = ResFile()
-    # bigfile.open(csvdirname, "total.csv", "a")
     # #First line is populated by names of columns
-    # bigfile.append("datetime,latitude,longitude,frequency,magnitude,csvfile,pngfile")
-    #
-    #
     # The File holds only names of detailed measurement files and abovetreshold value
     measlog = AsyncWrite("{}/measlog.csv".format(csvdirname), "a",
                          "datetime,latitude,longitude,abovethreshold,csvfile,pngfile\r\n")
@@ -354,42 +318,40 @@ def meascontrol(dirmeas):
     allres = AsyncWrite("{}/total.csv".format(csvdirname), "a", "datetime,latitude,longitude,frequency,magnitude,csvfile,pngfile")
     allres.start()
     #
-    clearfsh = FSH6(vars['fshport'])
-    # clearfsh.connect(vars['fshport'])
-    # Read output and do nothing...
-    clearfsh.getresults(newlinechar='\r')
-    clearfsh.close()
-    #
+    # First CLEAR output buffer of FSH-6
+    # for i in range(3):
+    #     clearfsh = FSH6(vars['fshport'])
+    #     # Read output and do nothing...
+    #     clearfsh.getresults(newlinechar='\r')
+    #     clearfsh.close()
+    # #
     config = configparser.ConfigParser()
     print("Config file: ./conf/{}.ini".format(vars['config']))
     config.read("./conf/%s.ini" % (vars['config']))
     threshold = float(config.get("level","threshold"))
     #
+    counter = 0
     start = time.time()
     end = start
     while vars['time'] >= (end - start):
-        onestep( vars['fshport'], vars['gpsport'], csvdirname, imagedirname, "{}/total.csv".format(csvdirname), "{}/measlog.csv".format(csvdirname), vars['config'],threshold)
+        onestep( vars['fshport'],
+                 vars['gpsport'],
+                 csvdirname,
+                 imagedirname,
+                 "{}/total.csv".format(csvdirname),
+                 "{}/measlog.csv".format(csvdirname),
+                 vars['config'],
+                 threshold,
+                 counter)
         time.sleep(vars['sleep'])
         end = time.time()
-    # bigfile.close()
-    # measlogfile.close()
+        counter += 1
     
     print("Measurement has completed ...")
     print("time:%s sec, step: %s sec, span: %s sec" % (vars['time'], vars['sleep'], (end - start)))
 
-
-def dirhandling():
-    if os.path.isdir("%s/gpspectrum/data" % homedir) != True:
-        os.makedirs("%s/gpspectrum/data" % homedir)
-    dirpath = "%s/gpspectrum" % homedir
-    return dirpath
-
 def main():
-    #variables=Getvar()
-    #vars=variables.getvars()
-    #onestep( vars['fshport'], vars['gpsport'], vars['dirname'], vars['fstart'], vars['fstop'] )
-    dirmeas = dirhandling()
-    meascontrol(dirmeas)
+    meascontrol()
 
 if __name__ == "__main__":
     main()
