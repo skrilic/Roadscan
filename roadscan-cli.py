@@ -53,6 +53,9 @@ class Getvar:
         parser.add_option("-s", "--sleep", type="string", dest="sleep",
                           help="SECONDS betweens two consecutive measurements. (Default: 1 sec)", metavar="SECONDS")
 
+        parser.add_option("-a", "--audio", type="string", dest="audio",
+                          help="Audio notification for every measurement cycle (on/off). (Default: off)", metavar="AUDIO")
+
         # parser.add_option("-q", "--sqlitedb", type="string", dest="sqldb",
         #                   help="The name of output SQLite database", metavar="SQLITEDB")
 
@@ -96,28 +99,19 @@ class Getvar:
             self.sleep = float(options.sleep)
         else:
             self.sleep = 1
-        #
-        # if options.sqldb:
-        #     sqlitedb = options.sqldb
-        # else:
-        #     sqlitedb = 'none'
-        #     print "No sqlitedb. Never mind for now, it is OK!"
-        #     #callexit("There is not output SQLite database variable!\r\
-        #     #        For usage, Please type: <program> --help")
-        #
-        # Remove previous output file if such exists...
-        # if os.path.exists("%s" % ofile):
-        #    os.remove("%s" % ofile)
-        # Remove previous sqlite database if such exists ...
-        # if os.path.exists("%s" % sqlitedb):
-        #    os.remove("%s" % sqlitedb)
-        #
-        return {'fshport': self.fshport, \
-                'gpsport': self.gpsport, \
-                'gpsmodel': self.gpsmodel, \
-                'dirname': self.dirname, \
-                'time': self.time, 'sleep': self.sleep, \
-                'config': self.config}
+
+        if options.audio:
+            self.audio = options.audio
+        else:
+            self.audio = 'off'
+
+        return {'fshport': self.fshport,
+                'gpsport': self.gpsport,
+                'gpsmodel': self.gpsmodel,
+                'dirname': self.dirname,
+                'time': self.time, 'sleep': self.sleep,
+                'config': self.config,
+                'audio': self.audio}
 
 
 # Connect FSH6
@@ -170,10 +164,12 @@ def time_stamp(gmt):
 
     return ("{}-{}-{} {}:{}:{}".format(dtnow.tm_year, dtnow.tm_mon, dtnow.tm_mday, dtnow.tm_hour, dtnow.tm_min, dtnow.tm_sec))
 
+
 # Perform measurement
 def measurement(fsh6):
     results = fsh6.getresults(newlinechar='\r')
     return results
+
 
 def draw_pyplot(frequencies, results, datetime, magn_unit, output):
     datax = frequencies
@@ -196,6 +192,15 @@ def draw_pyplot(frequencies, results, datetime, magn_unit, output):
     else:
         #plt.show(block=True)
         plt.savefig(output)
+
+
+def play_sound(sound_file):
+    import pygame
+    pygame.mixer.init()
+    pygame.mixer.music.load(sound_file)
+    pygame.mixer.music.play()
+    while pygame.mixer.music.get_busy() == True:
+        continue
 
 
 def latlong(port, type):
@@ -245,6 +250,7 @@ def main():
     gpsmodel = vars['gpsmodel']
     measurement_config_file = "{}".format(vars['config'])
     dirname = vars['dirname']
+    audio = vars['audio']
 
 
     config = configparser.ConfigParser()
@@ -300,8 +306,6 @@ def main():
                 if magnitude != '':
                     levels.append(float(magnitude))
             print("Progress time: {}secs of {}secs".format(int(end - start), vars['time']))
-            draw_pyplot(frequencies, levels, time_stamp(True), magn_unit, "display")
-            ## Play sound in accordance to vars for every cycle switch
 
             # Save links to measurement to file
             max_min = findpeaks(levels)
@@ -320,7 +324,14 @@ def main():
                 k += 1
 
             # Draw to pngfile
+            # draw_pyplot(frequencies, levels, time_stamp(True), magn_unit, "display")
             draw_pyplot(frequencies, levels, time_stamp(True), magn_unit, "%s/%s/png/%s" % (dirname, datetimestring, pngfile))
+
+            # Play the sound
+            if audio == 'on':
+                # sound_thread = threading.Thread(target=play_sound, args=("{}".format("./sounds/Electronic_Chime.wav")))
+                # sound_thread.start()
+                play_sound("./sounds/Electronic_Chime.wav")
 
             # Global Link file
             mlf1 = AsyncWrite(measlogfile, "a",

@@ -3,8 +3,8 @@
 __author__="slaven"
 #__date__ ="$28.05.2010. 10:51:58$"
 
-from PyQt4 import QtGui
-from PyQt4.QtCore import QThread, SIGNAL
+from PySide import QtGui
+from PySide.QtCore import QThread, SIGNAL
 import os, sys
 import maplayerDesign
 import time

@@ -9,3 +9,4 @@ pyudev
 #pyrtlsdr
 progressbar
 gmplot
+pygame
