@@ -29,7 +29,6 @@ class Gpsmgr:
                 long=elm[2].strip('">').strip('lon="')
         return "%s,%s" % (lat,long) #by using gpsbabel
 
-
     def getgpstime(self):
         gpsbbl=gpsbabel.GPSBabel()
         position=gpsbbl.getCurrentGpsLocation(self.port, self.gps_type)

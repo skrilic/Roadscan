@@ -1,6 +1,7 @@
 from Garmin import Gpsmgr
 from optparse import OptionParser
 
+
 class Getvar:
 
     def callexit(self, message_string):
@@ -35,12 +36,16 @@ class Getvar:
 
 def latlong(port, type):
     if port == 'off':
+        print("Info: The GPS is off!")
         mylocation = "0.000000,0.000000"
     else:
+        print("Info: Triying to connect with GPS!")
         mygps = Gpsmgr(port, type)
         try:
+            print("Info: Reading GPS position!")
             mylocation=mygps.getpos()
         except:
+            print("Info: Cannot connect to GPS!")
             mylocation = "0.000000,0.000000"
     return mylocation
 

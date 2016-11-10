@@ -8,3 +8,4 @@ pyudev
 #folium
 #pyrtlsdr
 progressbar
+gmplot
