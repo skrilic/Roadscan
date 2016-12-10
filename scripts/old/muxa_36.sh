@@ -9,7 +9,7 @@ read tipka2
 #exit()
 #fi
 su -c "chmod 777 /dev/ttyUSB0; chmod 777 /dev/ttyUSB1"
-python roadscan-cli.py -g off -p /dev/ttyUSB0 -d data/muxa_36 -c conf/muxa_36.ini -t 10 -s 3 -a on
+python gpspectrum.py -g off -p /dev/ttyUSB0 -d data/muxa_36 -c muxa_36 -t 10 -s 3
 echo -e "PRESS ANY KEY FOR NEXT ... OR Ctrl+C TO STOP."
 read tipka3
 echo -e "HOW LONG THE MEASUREMENT IS GOING TO LAST IN secs:"
@@ -17,4 +17,4 @@ read timesec
 echo -e "GPS PORT (ie. /dev/ttyUSB1 or off to disable GPS read out):"
 read gpsport
 echo -e "MEASUREMENT IS STARTING..."
-python roadscan-cli.py -g $gpsport -p /dev/ttyUSB0 -d data/muxa_36 -c conf/muxa_36.ini -t $timesec -s 2 -a on
+python gpspectrum.py -g $gpsport -p /dev/ttyUSB0 -d data/muxa_36 -c muxa_36 -t $timesec -s 2
