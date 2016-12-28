@@ -1,7 +1,7 @@
-pyside
+#pyside
 gpsbabel
 pyserial
-matplotlib
+#matplotlib
 stdConfigParser
 #python2-biggles
 pyudev
