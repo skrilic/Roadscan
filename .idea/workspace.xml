@@ -18,7 +18,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/RoadScan$maplayer_gui.coverage" NAME="maplayer-gui Coverage Results" MODIFIED="1482961063576" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/RoadScan$basicgui_tkinter.coverage" NAME="basicgui-tkinter Coverage Results" MODIFIED="1482971662575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/examples" />
+    <SUITE FILE_PATH="coverage/RoadScan$basicgui_tkinter.coverage" NAME="basicgui-tkinter Coverage Results" MODIFIED="1483027414517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/examples" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -56,8 +56,8 @@
       <file leaf-file-name="basicgui-tkinter.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/basicgui-tkinter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="15" column="84" lean-forward="false" selection-start-line="15" selection-start-column="84" selection-end-line="15" selection-end-column="84" />
+            <state relative-caret-position="1140">
+              <caret line="76" column="57" lean-forward="false" selection-start-line="76" selection-start-column="57" selection-end-line="76" selection-end-column="57" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -165,8 +165,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="380" />
-    <option name="y" value="41" />
+    <option name="x" value="103" />
+    <option name="y" value="39" />
     <option name="width" value="1372" />
     <option name="height" value="921" />
   </component>
@@ -186,6 +186,7 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -228,7 +229,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -660,7 +660,14 @@
       <option name="project" value="LOCAL" />
       <updated>1482961891347</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Redesign Tkinter GUI">
+      <created>1482971773933</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1482971773933</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -669,19 +676,19 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="380" y="41" width="1372" height="921" extended-state="0" />
+    <frame x="103" y="39" width="1372" height="921" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32765958" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3268999" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2376357" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936978" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24060151" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24060151" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27124774" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -717,7 +724,8 @@
     <MESSAGE value="Correct some small pyplot issues" />
     <MESSAGE value="Add example programs (Basic Tkinter GUI design and GPS testing)" />
     <MESSAGE value="ABasic Tkinter GUI design move to tests folder" />
-    <option name="LAST_COMMIT_MESSAGE" value="ABasic Tkinter GUI design move to tests folder" />
+    <MESSAGE value="Redesign Tkinter GUI" />
+    <option name="LAST_COMMIT_MESSAGE" value="Redesign Tkinter GUI" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -943,8 +951,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/basicgui-tkinter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="15" column="84" lean-forward="false" selection-start-line="15" selection-start-column="84" selection-end-line="15" selection-end-column="84" />
+        <state relative-caret-position="1140">
+          <caret line="76" column="57" lean-forward="false" selection-start-line="76" selection-start-column="57" selection-end-line="76" selection-end-column="57" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
