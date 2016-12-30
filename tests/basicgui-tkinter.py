@@ -74,7 +74,7 @@ class RoadscanGui:
         self.latlnglbl = ttk.Label(self.frame_status, text="lat/lng:", font="Arial 11")
         self.latlng = ttk.Entry(self.frame_status, width=25)
         self.magnlbl = ttk.Label(self.frame_status, text="Magn.:", font="Arial 11")
-        self.magn = ttk.Entry(self.frame_status)
+        self.magn = ttk.Entry(self.frame_status, width=25)
         self.start = ttk.Button(self.frame_status, text="Start", command=self.start_measurement)
         self.progbar = ttk.Progressbar(self.frame_status, orient=HORIZONTAL, mode="indeterminate")
 
