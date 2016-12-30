@@ -105,6 +105,7 @@ class RoadscanGui:
         import pyudev
         context = pyudev.Context()
 
+        # At first, clear the Entry boxes
         self.gpsport.delete(0, END)
         self.fsh6port.delete(0, END)
 
@@ -115,7 +116,7 @@ class RoadscanGui:
             for device in context.list_devices(subsystem='tty', ID_BUS='usb'):
                 if device['ID_MODEL_FROM_DATABASE'].find('GPS') != -1:
                     self.gpsport.insert(0, device['DEVNAME'])
-                elif device['ID_MODEL_FROM_DATABASE'].find('FTDI') != -1:
+                elif device['ID_MODEL_FROM_DATABASE'].find('FT232') != -1:
                     self.fsh6port.insert(0, device['DEVNAME'])
                 else:
                     self.gpsport.insert(0, "Unknown")
@@ -137,6 +138,7 @@ class RoadscanGui:
     def gps_test(self):
         from Garmin import Gpsmgr
         port = self.gpsport.get()
+        self.progbar.start()
         if port.strip() != "":
             type = 'garmin'
             # latit, longit = latlong(port, type).split(',')
@@ -161,6 +163,7 @@ class RoadscanGui:
             self.latlng.insert(0, mylocation)
         else:
             tkMessageBox.showerror("Error", "GPS port is not defined!")
+        self.progbar.stop()
         #return mylocation
 
 

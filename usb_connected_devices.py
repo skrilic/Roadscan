@@ -19,5 +19,6 @@ import pprint
 context = pyudev.Context()
 
 for device in context.list_devices(subsystem='tty', ID_BUS='usb'):
-	# pprint.pprint(dict(device))
-    print("{} :: {}".format(device['DEVNAME'], device['ID_VENDOR']))
+    print("{}; {}; {}".format(device['DEVNAME'],
+                              device['ID_MODEL_FROM_DATABASE'],
+                              device['ID_VENDOR_FROM_DATABASE']))
