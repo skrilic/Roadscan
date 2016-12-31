@@ -2,9 +2,11 @@ from Tkinter import *
 import tkFileDialog
 import tkMessageBox
 import ttk
-
+import threading
 
 class RoadscanGui:
+
+    cnffile = ""
 
     def __init__(self, master):
         master.title("Roadscan")
@@ -13,10 +15,10 @@ class RoadscanGui:
         # WIDGETS STYLE
         self.style = ttk.Style()
         self.style.configure('TFrame', background='oldlace')
-        self.style.configure('TButton', foreground='lightgrey', background='grey', relief=GROOVE)
-        self.style.configure('TEntry', foreground='darkgrey', background='lightgreen', font=('Arial', 11))
-        self.style.configure('TLabel', foreground='darkgrey', background='oldlace', font=('Arial', 10, 'normal'))
-        self.style.configure('TCheckbutton', foreground='darkgrey', background='oldlace', font=('Arial', 10, 'normal'))
+        self.style.configure('TButton', foreground='#181a1e', background='#9aa0a0', relief=GROOVE)
+        self.style.configure('TEntry', foreground='#181a1e', background='#89f0f9', font=('Arial', 11))
+        self.style.configure('TLabel', foreground='#181a1e', background='oldlace', font=('Arial', 10, 'normal'))
+        self.style.configure('TCheckbutton', foreground='#181a1e', background='oldlace', font=('Arial', 10, 'normal'))
 
         # CREATE MENU BAR
         self.menubar = Menu(master)
@@ -71,10 +73,11 @@ class RoadscanGui:
         self.frame_status = ttk.Frame(master)
         self.frame_status.pack(fill=X)
 
-        self.latlnglbl = ttk.Label(self.frame_status, text="lat/lng:", font="Arial 11")
+        self.latlnglbl = ttk.Label(self.frame_status, text="lat/lng:")
         self.latlng = ttk.Entry(self.frame_status, width=25)
-        self.magnlbl = ttk.Label(self.frame_status, text="Magn.:", font="Arial 11")
+        self.magnlbl = ttk.Label(self.frame_status, text="Magn.:")
         self.magn = ttk.Entry(self.frame_status, width=25)
+
         self.start = ttk.Button(self.frame_status, text="Start", command=self.start_measurement)
         self.progbar = ttk.Progressbar(self.frame_status, orient=HORIZONTAL, mode="indeterminate")
 
@@ -92,10 +95,11 @@ class RoadscanGui:
         fname = tkFileDialog.askopenfilename(filetypes=(("Configuration file", "*.ini"), ("Text files", "*.txt")))
         if fname:
             try:
-                print("""here it comes: self.settings["config"].set(fname)""")
+                tkMessageBox.showinfo("Information", "Configuration file selected: %s" % fname)
+                self.cnffile = fname
             except:  # <- naked except is a bad idea
                 tkMessageBox.showerror("Open Configuration File", "Failed to read file\n'%s'" % fname)
-            return
+
 
     def detect_ports(self):
         """
@@ -126,8 +130,72 @@ class RoadscanGui:
             if self.fsh6port.get() == "":
                 tkMessageBox.showerror("Error", "You cannot measure without Instrument!")
 
-    def start_measurement(self):
+
+    def simulator(self, mt_stop):
+        import time
+        self.start['text'] = "Stop"
+        self.progbar.start()
+
+        for count in range(0, 20):
+            if (mt_stop.is_set()):
+                print("simulator: STOP Pressed")
+                break
+            else:
+                print("simulator: %s - Change position and Magnitude" % count)
+                self.latlng.delete(0, END)
+                self.magn.delete(0, END)
+                self.latlng.insert(0, "%s,%s" % (count, count+2))
+                self.magn.insert(0, count + 1)
+                mt_stop.wait(1)
+                time.sleep(1)
+        self.progbar.stop()
         return
+
+
+    def start_measurement(self):
+        if (self.cnffile == ""):
+            tkMessageBox.showerror("Error", "Configuration file was not selected!")
+        elif (self.fsh6port == "" or self.fsh6port == "Unknown"):
+            tkMessageBox.showerror("Error", "Meas. device is not connected or unknown!")
+        else:
+            #tkMessageBox.showinfo("Information", "Lets start ...")
+
+            print("Config file: {}".format(self.cnffile))
+            print("Measurement device port: {}".format(self.fsh6port.get()))
+            print("GPS device port: {}".format(self.gpsport.get()))
+            print("Sound enabled: {}".format(self.audioon.get()))
+
+            # if (self.start['text'] == "Stop"):
+            #     self.start['text'] = "Start"
+            # else:
+            #     self.start['text'] = "Stop"
+            mt_stop = threading.Event()
+            if (self.start['text'] == "Start" and threading.active_count() == 1):
+                mt = threading.Thread(target=self.simulator, args=(mt_stop,))
+                mt.start()
+            elif (self.start['text'] == "Stop" and threading.active_count() == 2):
+                mt = threading.current_thread()
+                mt_stop = threading.Event()
+                #mt_stop.set()
+                mt.join()
+                self.start['text'] = "Start"
+                #mt = threading.Thread(target=self.simulator, args=(mt_stop,))
+                #mt.start()
+
+
+            # if (self.start['text'] == "Stop"):
+            #     print("main: mt_stop EVENT set")
+            #     mt_stop.set()
+            #
+            # mt = threading.Thread(target=self.simulator, args=(mt_stop,))
+            # mt.start()
+
+            # if mt_stop.is_set():
+            #     mt.join()
+
+            #self.start['text'] = "Start"
+        return
+
 
     def stop_measurement(self):
         return
