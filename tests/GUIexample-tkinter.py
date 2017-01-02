@@ -3,14 +3,27 @@ import tkFileDialog
 import tkMessageBox
 import ttk
 import threading
+import signal, os
+import Queue
+import random
+import time
+
+# Variable to control working Loop from GUI
+wt1_running = False
+
+# Variable to control measurement thread
+mt_exit = False
+
 
 class RoadscanGui:
 
     cnffile = ""
 
-    def __init__(self, master):
+    def __init__(self, master, queue, stopRequest):
+        self.queue = queue
+
+        master.config()
         master.title("Roadscan")
-        master.resizable(False, False)
 
         # WIDGETS STYLE
         self.style = ttk.Style()
@@ -25,7 +38,7 @@ class RoadscanGui:
 
         self.fileMenu = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="File", menu=self.fileMenu)
-        self.fileMenu.add_command(label="Exit", command=self.onExit)
+        self.fileMenu.add_command(label="Exit", command=stopRequest)
 
         self.utilMenu = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="Utils", menu=self.utilMenu)
@@ -131,77 +144,28 @@ class RoadscanGui:
                 tkMessageBox.showerror("Error", "You cannot measure without Instrument!")
 
 
-    def simulator(self, mt_stop):
-        import time
-        self.start['text'] = "Stop"
-        self.progbar.start()
-
-        for count in range(0, 20):
-            if (mt_stop.is_set()):
-                print("simulator: STOP Pressed")
-                break
-            else:
-                print("simulator: %s - Change position and Magnitude" % count)
-                self.latlng.delete(0, END)
-                self.magn.delete(0, END)
-                self.latlng.insert(0, "%s,%s" % (count, count+2))
-                self.magn.insert(0, count + 1)
-                mt_stop.wait(1)
-                time.sleep(1)
-        self.progbar.stop()
-        return
-
-
     def start_measurement(self):
+        global wt1_running
         if (self.cnffile == ""):
             tkMessageBox.showerror("Error", "Configuration file was not selected!")
         elif (self.fsh6port == "" or self.fsh6port == "Unknown"):
             tkMessageBox.showerror("Error", "Meas. device is not connected or unknown!")
         else:
             #tkMessageBox.showinfo("Information", "Lets start ...")
+            if (self.start['text'] == "Start"):
+                wt1_running = True
+                self.progbar.start()
+                self.start['text'] = "Stop"
+            else:
+                wt1_running = False
+                self.progbar.stop()
+                self.start['text'] = "Start"
 
             print("Config file: {}".format(self.cnffile))
             print("Measurement device port: {}".format(self.fsh6port.get()))
             print("GPS device port: {}".format(self.gpsport.get()))
             print("Sound enabled: {}".format(self.audioon.get()))
 
-            # if (self.start['text'] == "Stop"):
-            #     self.start['text'] = "Start"
-            # else:
-            #     self.start['text'] = "Stop"
-            mt_stop = threading.Event()
-            if (self.start['text'] == "Start" and threading.active_count() == 1):
-                mt = threading.Thread(target=self.simulator, args=(mt_stop,))
-                mt.start()
-            elif (self.start['text'] == "Stop" and threading.active_count() == 2):
-                mt = threading.current_thread()
-                mt_stop = threading.Event()
-                #mt_stop.set()
-                mt.join()
-                self.start['text'] = "Start"
-                #mt = threading.Thread(target=self.simulator, args=(mt_stop,))
-                #mt.start()
-
-
-            # if (self.start['text'] == "Stop"):
-            #     print("main: mt_stop EVENT set")
-            #     mt_stop.set()
-            #
-            # mt = threading.Thread(target=self.simulator, args=(mt_stop,))
-            # mt.start()
-
-            # if mt_stop.is_set():
-            #     mt.join()
-
-            #self.start['text'] = "Start"
-        return
-
-
-    def stop_measurement(self):
-        return
-
-    def onExit(self):
-        quit()
 
     def gps_test(self):
         from Garmin import Gpsmgr
@@ -249,10 +213,78 @@ class RoadscanGui:
             tkMessageBox.showinfo("Information", "There is not any USB device connected!")
 
 
+    def readMessage(self):
+        """
+        Handle all the messages currently in the queue (if any).
+        """
+        while self.queue.qsize():
+            try:
+                msg = self.queue.get(0)
+                # Check contents of message and do what it says
+                # As a test, we simply print it
+                receivedData = msg.split(';')
+
+                self.latlng.delete(0, END)
+                self.latlng.insert(0, receivedData[0])
+
+                self.magn.delete(0, END)
+                self.magn.insert(0, receivedData[1])
+
+                #print("Received Message: {}".format(msg))
+            except Queue.Empty:
+                pass
+
+
+class AppThread:
+    def __init__(self, app):
+        self.app = app
+        self.queue = Queue.Queue()
+
+        self.gui = RoadscanGui(app, self.queue, self.stopRequest)
+        self.running = 1
+
+        self.thread1 = threading.Thread(target=self.simulator)
+        self.thread1.start()
+
+        self.readLoop()
+
+
+    def simulator(self):
+        import time
+        print("|----> Simulator CALLED!!!")
+        count = 0
+        while self.running:
+            if wt1_running:
+                print("simulator: %s - Change position and Magnitude" % count)
+                # self.latlng.delete(0, END)
+                # self.magn.delete(0, END)
+                # self.latlng.insert(0, "%s,%s" % (count, count + 2))
+                # self.magn.insert(0, count + 1)
+                msg = "{};{}".format(count*10000, count)
+                self.queue.put(msg)
+                time.sleep(1)
+                count += 1
+
+    def stopRequest(self):
+        self.running = 0
+
+    def readLoop(self):
+        """
+        Check every 100 ms if there is something new in the queue.
+        """
+        self.gui.readMessage()
+        if not self.running:
+            # This is the brutal stop of the system. You may want to do
+            # some cleanup before actually shutting it down.
+            import sys
+            sys.exit(1)
+        self.app.after(100, self.readLoop)
+
 
 def main():
     root = Tk()
-    roadscan = RoadscanGui(root)
+    #roadscan = RoadscanGui(root)
+    roadscan = AppThread(root)
     root.mainloop()
 
 
