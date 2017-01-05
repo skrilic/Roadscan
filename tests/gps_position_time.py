@@ -39,7 +39,7 @@ def latlong(port, type):
         print("Info: The GPS is off!")
         mylocation = "0.000000,0.000000"
     else:
-        print("Info: Triying to connect with GPS!")
+        print("Info: Trying to connect with GPS!")
         mygps = Gpsmgr(port, type)
         try:
             print("Info: Reading GPS position!")
