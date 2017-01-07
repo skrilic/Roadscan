@@ -3,22 +3,105 @@ import tkFileDialog
 import tkMessageBox
 import ttk
 import threading
-import signal, os
 import Queue
-import random
-import time
 import os
-
-
+import ConfigParser as configparser
+from measurements.mobile import *
 from devices.Garmin import Gpsmgr
+import matplotlib.pyplot as plt
+import time
+
+magnitude_unit = {
+    '0': 'dBm',
+    '1': 'dBmV',
+    '2': 'dBuV',
+    '3': 'dBuV/m',
+    '4': 'dBuA/m',
+    '5': 'dB',
+    '6': 'Volt',
+    '7': 'Watt',
+    '8': 'V/m'
+}
+
 
 # Variable to control working Loop from GUI
 wt1_running = False
 
 measdev = ""
 gpsdev = ""
-measconf = ""
+measconf = "./conf/default.ini"
 audio_switch = 0
+
+class AsyncWrite(threading.Thread):
+    def __init__(self, output_file, file_mode, text):
+        threading.Thread.__init__(self)
+        self.output_file = output_file
+        self.file_mode = file_mode
+        self.text = text
+
+    def run(self):
+        f = open(self.output_file, self.file_mode)
+        f.write(self.text)
+        f.close()
+
+
+def time_stamp(gmt):
+    """
+    Return timestamp for log file and spectrum plot
+    :param gmt: True or False
+    :return: Date-time string
+    """
+    if gmt:
+        dtnow = time.gmtime()
+    else:
+        dtnow = time.localtime()
+
+    return ("{}-{}-{} {}:{}:{}".format(dtnow.tm_year, dtnow.tm_mon, dtnow.tm_mday, dtnow.tm_hour, dtnow.tm_min,
+                                       dtnow.tm_sec))
+
+def draw_pyplot(frequencies, levels, datetime, magn_unit, output):
+    datax = frequencies
+    datay = levels
+    plt.ion()
+    plt.figure(1)
+    plt.subplot(111)
+    # # Clear current figure and prepare for the next scan...
+    plt.clf()
+    # #---------#
+    plt.title('GMT: {}'.format(datetime),
+              fontsize=12, fontweight='bold')
+    plt.xlabel('Frequency [Hz]', fontsize=12, fontweight='bold')
+    plt.ylabel('Magnitude [{}]'.format(magnitude_unit[magn_unit]), fontsize=12, fontweight='bold')
+    plt.grid(True)
+    plt.plot(datax, datay, color='r', label='the data')
+
+    if output == "display":
+        plt.draw()
+    else:
+        # plt.show(block=True)
+        plt.savefig(output)
+
+
+def play_sound(sound_file):
+    import pygame
+    pygame.mixer.init()
+    pygame.mixer.music.load(sound_file)
+    pygame.mixer.music.play()
+    while pygame.mixer.music.get_busy() == True:
+        continue
+
+
+def findpeaks(list):
+    vmax0 = float(list[0])
+    vmin0 = float(list[0])
+    for v in list:
+        if v != '':
+            if float(v) > vmax0:
+                vmax0 = float(v)
+            if float(v) < vmin0:
+                vmin0 = float(v)
+    return {'ymax': vmax0, 'ymin': vmin0}
+
 
 class RoadscanGui:
 
@@ -184,10 +267,10 @@ class RoadscanGui:
                 self.start['text'] = "Start"
 
             # Set global vars so the thread can read from
-            # measdev = self.fsh6port.get()
-            # gpsdev = self.gpsport.get()
-            # measconf = self.cnffile
-            # audio_switch = self.audioon.get()
+            measdev = self.fsh6port.get()
+            gpsdev = self.gpsport.get()
+            measconf = self.cnffile
+            audio_switch = self.audioon.get()
 
             # print("Config file: {}".format(self.cnffile))
             # print("Measurement device port: {}".format(self.fsh6port.get()))
@@ -270,22 +353,20 @@ class AppThread:
         self.gui = RoadscanGui(app, self.queue, self.stopRequest)
         self.running = 1
 
-        self.thread1 = threading.Thread(target=self.measurementStep)
+        self.thread1 = threading.Thread(target=self.testStep)
         self.thread1.start()
 
         self.readLoop()
 
-
-    def measurementStep(self):
+    def testStep(self):
 
         # fshport = measdev
         # gpsport = gpsdev
+        # audio = audio_switch
         gpsmodel = 'garmin'
         measurement_config_file = measconf
         dirname = os.getcwd() + '/data'
-        # audio = audio_switch
 
-        import time
         print("|----> Measurement CALLED!!!")
         count = 0
         while self.running:
@@ -302,23 +383,6 @@ class AppThread:
                 print("*Fshport: {}\n*GPS: {}\n*Audio: {}\n*Output directory {}".format(measdev, gpsdev, audio_switch, dirname))
                 # Here goes Measurement Step
                 # ...
-
-
-    def simulator(self):
-        import time
-        print("|----> Simulator CALLED!!!")
-        count = 0
-        while self.running:
-            if wt1_running:
-                print("simulator: %s - Change position and Magnitude" % count)
-                # self.latlng.delete(0, END)
-                # self.magn.delete(0, END)
-                # self.latlng.insert(0, "%s,%s" % (count, count + 2))
-                # self.magn.insert(0, count + 1)
-                msg = "{};{}".format(count*10000, count)
-                self.queue.put(msg)
-                time.sleep(1)
-                count += 1
 
     def stopRequest(self):
         self.running = 0
@@ -345,5 +409,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

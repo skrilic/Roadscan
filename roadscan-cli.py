@@ -167,6 +167,7 @@ def time_stamp(gmt):
 
 # Perform measurement
 def measurement(fsh6):
+
     results = fsh6.getresults(newlinechar='\r')
     return results
 
@@ -338,8 +339,8 @@ def main():
                               "%s,%s,%s,%s,%s\r\n" % (dattim,
                                                       myposition,
                                                       abovethreshold,
-                                                      "{}/{}".format(csvdirname,csvfile),
-                                                      "{}/{}".format(imagedirname,pngfile))
+                                                      "{}/{}".format(csvdirname, csvfile),
+                                                      "{}/{}".format(imagedirname, pngfile))
                               )
             mlf1.start()
 
