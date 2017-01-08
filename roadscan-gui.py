@@ -31,6 +31,16 @@ measdev = ""
 gpsdev = ""
 measconf = "./conf/default.ini"
 audio_switch = 0
+gpsmodel = 'garmin'
+measEq = None
+app_cwd = os.getcwd() # Find Current dir
+sound_file = "{}/{}".format(app_cwd, "/sounds/Electronic_Chime.wav")
+directory = '%s/data' % app_cwd # Output results folder
+sleep = 0 # Sleep between measurements cycles
+
+# Output values
+frequencies = list()
+levels = list()
 
 class AsyncWrite(threading.Thread):
     def __init__(self, output_file, file_mode, text):
@@ -59,7 +69,9 @@ def time_stamp(gmt):
     return ("{}-{}-{} {}:{}:{}".format(dtnow.tm_year, dtnow.tm_mon, dtnow.tm_mday, dtnow.tm_hour, dtnow.tm_min,
                                        dtnow.tm_sec))
 
-def draw_pyplot(frequencies, levels, datetime, magn_unit, output):
+def draw_pyplot(datetime, magn_unit, output):
+    global frequencies
+    global levels
     datax = frequencies
     datay = levels
     plt.ion()
@@ -250,6 +262,7 @@ class RoadscanGui:
         global gpsdev
         global measconf
         global audio_switch
+        global measEq
 
         if (self.cnffile == ""):
             tkMessageBox.showerror("Error", "Configuration file was not selected!")
@@ -261,6 +274,12 @@ class RoadscanGui:
                 wt1_running = True
                 self.progbar.start()
                 self.start['text'] = "Stop"
+                # measEq Controls FSH6 and GPS garmin
+                measdev = self.fsh6port.get()
+                gpsdev = self.gpsport.get()
+                measconf = self.cnffile
+                # print("*FSH: {}\n*GPS: {}\n*Config: {}".format(measdev, gpsdev, measconf))
+                measEq = MeasurementStep(measdev, gpsdev, gpsmodel, directory, measconf)
             else:
                 wt1_running = False
                 self.progbar.stop()
@@ -340,6 +359,9 @@ class RoadscanGui:
                 self.magn.delete(0, END)
                 self.magn.insert(0, receivedData[1])
 
+                # Draw PLOT
+                draw_pyplot(receivedData[2], receivedData[3], receivedData[4])
+
                 #print("Received Message: {}".format(msg))
             except Queue.Empty:
                 pass
@@ -353,10 +375,122 @@ class AppThread:
         self.gui = RoadscanGui(app, self.queue, self.stopRequest)
         self.running = 1
 
-        self.thread1 = threading.Thread(target=self.testStep)
+        self.thread1 = threading.Thread(target=self.measLoop)
         self.thread1.start()
 
         self.readLoop()
+
+    def measLoop(self):
+        # measEq Controls FSH6 and GPS garmin
+        global measEq
+        global frequencies
+        global levels
+
+        print("Config file: {}".format(measconf))
+
+        config = configparser.ConfigParser()
+        config.read("{}".format(measconf))
+
+        fstart = float(config.get("frequency", "start"))
+        fstop = float(config.get("frequency", "stop"))
+        magn_unit = config.get("unit", "unit")
+        threshold = float(config.get("level", "threshold"))
+
+        # Clear Frequency and Levels List
+        frequencies = list()
+
+        for i in range(300):
+            frequencies.append(fstart + i * (fstop - fstart) / 301)
+        counter = 0
+
+        datetimestring = time_stamp(gmt=True).replace(':', '-').replace(' ', '_')
+        csvdirname = "%s/%s/csv" % (directory, datetimestring)
+        imagedirname = "%s/%s/png" % (directory, datetimestring)
+        # Create folder infrastructure ...
+        os.makedirs(csvdirname)
+        os.makedirs(imagedirname)
+
+        # Now, create it ...
+        measlogfile = "{}/measlog.csv".format(csvdirname)
+        measlog_thread = AsyncWrite(measlogfile, "a",
+                                    "datetime,latitude,longitude,abovethreshold,csvfile,pngfile\r\n")
+        measlog_thread.start()
+        while self.running:
+            # JUST CREATE FILES FOR STORING RESULTS
+            # Names for files at first ...
+
+            filename_base = time_stamp(gmt=True).replace(':', '-').replace(' ', '_')
+            if measEq != None:
+                myposition = measEq.latlong()
+                # print("GPS: {}".format(myposition))
+                csvfile = "%s_%s.csv" % (myposition.replace(',', '-').replace('.', '_'), filename_base)
+                pngfile = "%s.png" % filename_base
+
+                results = measEq.measurement()
+                # print("Length of FSH6 Output is: {}".format(len(results)))
+                #
+                # For FSH6 length of correct buffer is 301
+                # Skip the first measurement, to get rid of FSH6 residual buffer (from previous measurement)
+                #
+                dattim = time_stamp(gmt=True)
+                if len(results) == 301 and counter > 0 and wt1_running:
+
+                    # Clear levels
+                    levels = list()
+
+                    for magnitude in results:
+                        if magnitude != '':
+                            levels.append(float(magnitude))
+
+                    # Save links to measurement to file
+                    max_min = findpeaks(levels)
+                    if (max_min['ymax'] - threshold) < 0:
+                        abovethreshold = 0
+                    else:
+                        abovethreshold = max_min['ymax'] - threshold
+
+                    # Files for the cycle
+                    # For every cycle write to the cycle measurement file
+                    csv_thread1 = AsyncWrite("{}/{}".format(csvdirname, csvfile), "w", "i, frequency, magnitude\r\n")
+                    csv_thread1.start()
+                    k = 0
+
+                    # print("Level, Freq. {} {}".format(len(levels), len(frequencies)))
+
+                    for lvl in levels:
+                        csv_thread2 = AsyncWrite("{}/{}".format(csvdirname, csvfile), "a",
+                                                 "{},{},{}\r\n".format(k, frequencies[k], lvl))
+                        csv_thread2.start()
+                        k += 1
+
+                    # Draw to pngfile
+                    plot_file = "%s/%s/png/%s" % (directory, datetimestring, pngfile)
+                    # draw_pyplot(frequencies, levels, time_stamp(True), magn_unit, plot_file)
+
+                    msg = "{};{};{};{};{}".format(myposition, max_min['ymax'], time_stamp(True), magn_unit, plot_file)
+                    self.queue.put(msg)
+
+                    # Play the sound
+                    if audio_switch:
+                        sound_thread = threading.Thread(target=play_sound, args=(sound_file,))
+                        sound_thread.start()
+                        # play_sound("%s/sounds/Electronic_Chime.wav" % app_cwd)
+
+                    # Global Link file
+                    mlf1 = AsyncWrite(measlogfile, "a",
+                                      "%s,%s,%s,%s,%s\r\n" % (dattim,
+                                                              myposition,
+                                                              abovethreshold,
+                                                              "{}/{}".format(csvdirname, csvfile),
+                                                              "{}/{}".format(imagedirname, pngfile))
+                                      )
+                    mlf1.start()
+            time.sleep(float(sleep))
+            counter += 1
+
+        measEq.release()
+        print("Measurement has completed ...")
+
 
     def testStep(self):
 
@@ -380,7 +514,7 @@ class AppThread:
                 self.queue.put(msg)
                 time.sleep(1)
                 count += 1
-                print("*Fshport: {}\n*GPS: {}\n*Audio: {}\n*Output directory {}".format(measdev, gpsdev, audio_switch, dirname))
+                # print("*Fshport: {}\n*GPS: {}\n*Audio: {}\n*Output directory {}".format(measdev, gpsdev, audio_switch, dirname))
                 # Here goes Measurement Step
                 # ...
 
