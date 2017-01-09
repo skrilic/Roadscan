@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="405ed95c-59b2-487e-af8e-1628eee5927b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/roadscan-gui.py" afterPath="$PROJECT_DIR$/roadscan-gui.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/maplayer-gui.py" afterPath="$PROJECT_DIR$/maplayer-gui.py" />
     </list>
     <list id="473f15cf-4bb3-4dc6-baa6-1d061d9006fb" name="Rejected commit: Default" comment="Merge branch 'master' of https://github.com/skrilic/gpsdrive&#10;&#10;Conflicts:&#10;&#9;.idea/workspace.xml&#10;" />
     <ignored path="gpspectrum.iws" />
@@ -28,7 +28,40 @@
     <favorites_list name="gpspectrum" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf>
+      <file leaf-file-name="maplayer-gui.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/maplayer-gui.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="263">
+              <caret line="181" column="52" lean-forward="false" selection-start-line="181" selection-start-column="52" selection-end-line="181" selection-end-column="52" />
+              <folding>
+                <element signature="e#82#106#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="kmltessellatebody.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/kmltessellatebody.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="kmlbody.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/kmlbody.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="36">
+              <caret line="2" column="66" lean-forward="false" selection-start-line="2" selection-start-column="66" selection-end-line="2" selection-end-column="66" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -62,7 +95,6 @@
         <option value="$PROJECT_DIR$/maplayerDesign.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/examples/gps_test.py" />
-        <option value="$PROJECT_DIR$/maplayer-gui.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/usb_connected_devices.py" />
         <option value="$PROJECT_DIR$/tests/basicgui-tkinter.py" />
@@ -78,6 +110,7 @@
         <option value="$PROJECT_DIR$/roadscan-cli-ver2.py" />
         <option value="$PROJECT_DIR$/data/2017-1-8_11-50-5/csv/measlog.csv" />
         <option value="$PROJECT_DIR$/roadscan-gui.py" />
+        <option value="$PROJECT_DIR$/maplayer-gui.py" />
       </list>
     </option>
   </component>
@@ -122,8 +155,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -508,7 +541,14 @@
       <option name="project" value="LOCAL" />
       <updated>1483813186307</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="GUI works as expected ...">
+      <created>1483883527692</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1483883527692</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -534,7 +574,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32673267" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30942896" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20053121" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19442351" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3055199" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -579,7 +619,8 @@
     <MESSAGE value="Thread testing ..." />
     <MESSAGE value="Merge branch 'master' of https://github.com/skrilic/Roadscan&#10;&#10;Conflicts:&#10;&#9;.idea/workspace.xml&#10;" />
     <MESSAGE value="..." />
-    <option name="LAST_COMMIT_MESSAGE" value="..." />
+    <MESSAGE value="GUI works as expected ..." />
+    <option name="LAST_COMMIT_MESSAGE" value="GUI works as expected ..." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -593,14 +634,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/examples/gps-test.py" />
-    <entry file="file://$PROJECT_DIR$/devices/FSH6mgr.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1200">
-          <caret line="82" column="72" lean-forward="false" selection-start-line="82" selection-start-column="72" selection-end-line="82" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -666,13 +699,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maplayer-gui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="26" lean-forward="false" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/gps_test.py" />
     <entry file="file://$PROJECT_DIR$/tests/gps_position_time.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -729,11 +755,7 @@
     <entry file="file://$PROJECT_DIR$/data/2017-1-7_12-38-57/png/2017-1-7_12-39-1.png" />
     <entry file="file://$PROJECT_DIR$/data/2017-1-7_12-38-57/csv/0_000000-0_000000_2017-1-7_12-39-1.csv" />
     <entry file="file://$PROJECT_DIR$/data/2017-1-7_13-5-45/png/2017-1-7_13-5-50.png" />
-    <entry file="file://$PROJECT_DIR$/data/2017-1-7_13-19-25/png/2017-1-7_13-19-43.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/data/2017-1-7_13-19-25/png/2017-1-7_13-19-43.png" />
     <entry file="file://$PROJECT_DIR$/conf/default.ini">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -745,7 +767,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
           <caret line="22" column="17" lean-forward="false" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -753,44 +774,17 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
           <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/2017-1-8_11-42-39/png/2017-1-8_11-42-49.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/2017-1-8_11-50-5/csv/measlog.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/2017-1-8_11-50-5/csv/0_000000-0_000000_2017-1-8_11-51-20.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-162">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/roadscan-cli-ver2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="175" column="19" lean-forward="false" selection-start-line="175" selection-start-column="19" selection-end-line="175" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/data/2017-1-8_11-42-39/png/2017-1-8_11-42-49.png" />
+    <entry file="file://$PROJECT_DIR$/data/2017-1-8_11-50-5/csv/measlog.csv" />
+    <entry file="file://$PROJECT_DIR$/data/2017-1-8_11-50-5/csv/0_000000-0_000000_2017-1-8_11-51-20.csv" />
+    <entry file="file://$PROJECT_DIR$/roadscan-cli-ver2.py" />
     <entry file="file://$PROJECT_DIR$/conf/muxa_36.ini">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="370">
           <caret line="65" column="13" lean-forward="true" selection-start-line="65" selection-start-column="13" selection-end-line="65" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -798,7 +792,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1458">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -811,7 +804,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -819,7 +811,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-134">
           <caret line="35" column="6" lean-forward="false" selection-start-line="35" selection-start-column="6" selection-end-line="35" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -827,7 +818,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2916">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -835,9 +825,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="471" column="0" lean-forward="false" selection-start-line="471" selection-start-column="0" selection-end-line="471" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -845,7 +832,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="77">
           <caret line="308" column="10" lean-forward="true" selection-start-line="308" selection-start-column="10" selection-end-line="308" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -853,8 +839,31 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="478">
           <caret line="70" column="0" lean-forward="false" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/kmlbody.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="66" lean-forward="false" selection-start-line="2" selection-start-column="66" selection-end-line="2" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/kmltessellatebody.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maplayer-gui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="181" column="52" lean-forward="false" selection-start-line="181" selection-start-column="52" selection-end-line="181" selection-end-column="52" />
           <folding>
-            <element signature="e#24#53#0" expanded="true" />
+            <element signature="e#82#106#0" expanded="true" />
           </folding>
         </state>
       </provider>

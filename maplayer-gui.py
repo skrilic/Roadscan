@@ -15,8 +15,10 @@ tmplvar=""
 tmplplacemark= "templates/kmlbody.xml"
 config = configparser.ConfigParser()
 config.read("conf/kml.ini")
-ptcsv = config.get("webroot","csv")
-ptimg = config.get("webroot","image")
+# ptcsv = config.get("webroot","csv")
+ptcsv = "csv"
+# ptimg = config.get("webroot","image")
+ptimg = "png"
 
 
 class KmlGeneratorWindow(QtGui.QWidget, maplayerDesign.Ui_FormKml):
@@ -92,6 +94,11 @@ class KmlGeneratorThread(QThread):
     def run(self):
         self.kml_generator
 
+    def remove_path(self, this_file):
+        splited_path = this_file.split('/')
+        length = len(splited_path)
+        return splited_path[length - 1]
+
     def file2string(self, filein):
         """
         Function gets name of input file with complete path and returns string populated with
@@ -147,13 +154,13 @@ class KmlGeneratorThread(QThread):
               cooval = cooval + "%s,%s,%s\r\n" % (elm[2],elm[1],elm[3])
               self.emit(SIGNAL('add_point(QString)'), str(j * 100 / max_lines))
               j += 1
-              #time.sleep(1)
-              #print(cooval)
+              # time.sleep(1)
+              # print(cooval)
         string_tsltbody = self.file2string(tsltbody)
         kmlfile.write(Template(string_tsltbody).substitute(style="redLineOrangePoly",
                                                            coords_values=cooval)) # Style could be: yellowLineGreenPoly or redLineOrangePoly, for now.
         #
-        #measlogfile must be opened again for Points definitions.
+        # measlogfile must be opened again for Points definitions.
         logobject.close()
         #
         logobject = open(name_in,"r")
@@ -164,9 +171,11 @@ class KmlGeneratorThread(QThread):
             long = elm[2]
             coordinates = "%s,%s" %(long,latit)
             if elm[0] != 'datetime':
-                description = elm[0] #Date and Time
-                csvfile = elm[4]
-                pngfile = elm[5]
+                description = elm[0] # Date and Time
+                # csvfile = elm[4]
+                # pngfile = elm[5]
+                csvfile = self.remove_path(elm[4])
+                pngfile = self.remove_path(elm[5])
                 placemark = Template(self.file2string(tmplplacemark)).substitute(pathtocsv=ptcsv,
                                                                                  pathtoimage=ptimg,
                                                                                  name=i,
@@ -175,14 +184,13 @@ class KmlGeneratorThread(QThread):
                                                                                  csv=csvfile,
                                                                                  spectrum=pngfile)
                 kmlfile.write(placemark)
-                i=i+1
-        #At last, write footer of KML file and then, close it.
+                i += 1
+        # At last, write footer of KML file and then, close it.
         for line in footer:
             kmlfile.write(line)
         kmlfile.close()
         logobject.close()
         return True
-
 
 def main():
     app = QtGui.QApplication(sys.argv)
