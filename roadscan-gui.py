@@ -264,8 +264,8 @@ class RoadscanGui:
         global audio_switch
         global measEq
 
-        if (self.cnffile == ""):
-            tkMessageBox.showerror("Error", "Configuration file was not selected!")
+        if (self.cnffile == "" or self.gpsport.get() =="" or self.fsh6port.get() == ""):
+            tkMessageBox.showerror("Error", "Configuration file, GPS or Instrument were not selected or present!")
         elif (self.fsh6port == "" or self.fsh6port == "Unknown"):
             tkMessageBox.showerror("Error", "Meas. device is not connected or unknown!")
         else:
@@ -491,32 +491,6 @@ class AppThread:
         measEq.release()
         print("Measurement has completed ...")
 
-
-    def testStep(self):
-
-        # fshport = measdev
-        # gpsport = gpsdev
-        # audio = audio_switch
-        gpsmodel = 'garmin'
-        measurement_config_file = measconf
-        dirname = os.getcwd() + '/data'
-
-        print("|----> Measurement CALLED!!!")
-        count = 0
-        while self.running:
-            if wt1_running:
-                print("simulator: %s - Change position and Magnitude" % count)
-                # self.latlng.delete(0, END)
-                # self.magn.delete(0, END)
-                # self.latlng.insert(0, "%s,%s" % (count, count + 2))
-                # self.magn.insert(0, count + 1)
-                msg = "{};{}".format(count * 10000, count)
-                self.queue.put(msg)
-                time.sleep(1)
-                count += 1
-                # print("*Fshport: {}\n*GPS: {}\n*Audio: {}\n*Output directory {}".format(measdev, gpsdev, audio_switch, dirname))
-                # Here goes Measurement Step
-                # ...
 
     def stopRequest(self):
         self.running = 0
