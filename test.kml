@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <kml xmlns="http://earth.google.com/kml/2.2">
+            <Document>
+             <name>Measurement path</name>
+		    <description>Tessallation represent choosen signal feature, and points consist details.</description>
+		    <Style id="yellowLineGreenPoly">
+		      <LineStyle>
+			<color>7f00ffff</color>
+			<width>4</width>
+		      </LineStyle>
+		      <PolyStyle>
+			<color>7f00ff00</color>
+		      </PolyStyle>
+		    </Style>
+		    <Style id="redLineOrangePoly">
+		      <LineStyle>
+			<color>501400FF</color>
+			<width>4</width>
+		      </LineStyle>
+		      <PolyStyle>
+			<color>5014B4FA</color>
+		      </PolyStyle>
+		    </Style>
+		<Placemark>
+		  <name>Max. value in the band</name>
+		  <description>Values along the path</description>
+		  <styleUrl>#redLineOrangePoly</styleUrl>
+		  <LineString>
+		    <extrude>1</extrude>
+		    <tessellate>1</tessellate>
+		    <altitudeMode>relativeToGround</altitudeMode>
+		    <coordinates>
+			    17.799640428,43.338681730,12.62
+17.799640428,43.338681730,10.58
+17.799640428,43.338681730,9.81
+17.799640428,43.338681730,8.52
+17.799640428,43.338681730,10.48
+17.799640428,43.338681730,12.48
+17.799640428,43.338681730,12.7
+17.799640428,43.338681730,12.33
+17.799640428,43.338681730,10.67
+17.799640428,43.338681730,9.82
+17.799640428,43.338681730,12.03
+17.799640428,43.338681730,11.71
+17.799640428,43.338681730,12.33
+17.799640428,43.338681730,9.93
+17.799640428,43.338681730,9.31
+17.799640428,43.338681730,7.92
+17.799640428,43.338681730,13.57
+17.799640428,43.338681730,8.76
+
+		    </coordinates>
+		  </LineString>
+		</Placemark>                <Placemark>
+                        <name>1 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-21-19.csv"> <img src="png/2017-2-1_11-21-19.png
+"></a>]]> 2017-2-1 11:21:23</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>2 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-21-23.csv"> <img src="png/2017-2-1_11-21-23.png
+"></a>]]> 2017-2-1 11:21:28</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>3 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-21-28.csv"> <img src="png/2017-2-1_11-21-28.png
+"></a>]]> 2017-2-1 11:21:33</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>4 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-21-33.csv"> <img src="png/2017-2-1_11-21-33.png
+"></a>]]> 2017-2-1 11:21:37</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>5 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-21-37.csv"> <img src="png/2017-2-1_11-21-37.png
+"></a>]]> 2017-2-1 11:21:41</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>6 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-21-42.csv"> <img src="png/2017-2-1_11-21-42.png
+"></a>]]> 2017-2-1 11:21:46</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>7 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-21-46.csv"> <img src="png/2017-2-1_11-21-46.png
+"></a>]]> 2017-2-1 11:21:51</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>8 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-21-51.csv"> <img src="png/2017-2-1_11-21-51.png
+"></a>]]> 2017-2-1 11:21:56</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>9 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-21-56.csv"> <img src="png/2017-2-1_11-21-56.png
+"></a>]]> 2017-2-1 11:22:0</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>10 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-22-1.csv"> <img src="png/2017-2-1_11-22-1.png
+"></a>]]> 2017-2-1 11:22:5</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>11 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-22-5.csv"> <img src="png/2017-2-1_11-22-5.png
+"></a>]]> 2017-2-1 11:22:10</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>12 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-22-10.csv"> <img src="png/2017-2-1_11-22-10.png
+"></a>]]> 2017-2-1 11:22:15</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>13 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-22-15.csv"> <img src="png/2017-2-1_11-22-15.png
+"></a>]]> 2017-2-1 11:22:20</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>14 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-22-20.csv"> <img src="png/2017-2-1_11-22-20.png
+"></a>]]> 2017-2-1 11:22:25</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>15 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-22-25.csv"> <img src="png/2017-2-1_11-22-25.png
+"></a>]]> 2017-2-1 11:22:30</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>16 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-22-30.csv"> <img src="png/2017-2-1_11-22-30.png
+"></a>]]> 2017-2-1 11:22:35</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>17 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-22-35.csv"> <img src="png/2017-2-1_11-22-35.png
+"></a>]]> 2017-2-1 11:22:39</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+                <Placemark>
+                        <name>18 </name>
+                        <description><![CDATA[<br/><a href="csv/43_338681730-17_799640428_2017-2-1_11-22-39.csv"> <img src="png/2017-2-1_11-22-39.png
+"></a>]]> 2017-2-1 11:22:43</description>
+                        <Point>
+                            <coordinates>17.799640428,43.338681730 </coordinates>
+                        </Point>
+                </Placemark>
+            </Document>
+</kml>
