@@ -10,7 +10,8 @@ uspješno odradio više stvarnih mjernih vožnji, uključujući sesije koje su
 trajale po nekoliko sati. Dokumentirana problematična mjesta stoga nisu tvrdnja
 da sustav nije radio. Ona opisuju tehnički dug, rizike ponovnoga pokretanja i
 točke na kojima bi modernizacija mogla nenamjerno ukloniti rješenje uvedeno
-zbog konkretnoga hardvera, firmwarea, Linuxa ili tada dostupnih Python paketa.
+zbog konkretnoga hardvera, ugrađenoga softvera (firmwarea), Linuxa ili tada
+dostupnih Python paketa.
 
 Zbog terenske povijesti projekta dokument razlikuje:
 
@@ -221,11 +222,11 @@ Naredbe `INIT` i `WAIT` postoje samo kao zakomentirane zamisli.
 zatim svako polje dijeli znakom CR. Viši sloj očekuje sirovu duljinu 301, ali
 zatim uklanja prazna polja i radi s frekvencijskim nizom od 300 elemenata.
 
-Autor potvrđuje da je asimetrija 301 ulazni uzorak prema 300 izlaznih vrijednosti
-bila nužna za dobivanje ispravnoga izlaza s uporabljena FSH6. Točan razlog na
-razini firmwarea i formata odgovora nije sačuvan u kodu, ali ponašanje nije
-slučajna pogreška brojenja i ne smije se mehanički „ispraviti” na 300→300 ili
-301→301.
+Autor potvrđuje da je asimetrija od 301 ulaznoga uzorka prema 300 izlaznih
+vrijednosti bila nužna za dobivanje ispravnoga izlaza iz uporabljenoga
+analizatora FSH6. Točan razlog na razini firmwarea i formata odgovora nije
+sačuvan u kodu, ali ponašanje nije slučajna pogreška brojenja i ne smije se
+mehanički „ispraviti” na 300→300 ili 301→301.
 
 Pri modernizaciji taj se odnos najprije mora zapisati kao regresijski test nad
 poznatim dobrim sirovim odgovorom. Tek zatim ima smisla provjeriti ponaša li se
@@ -495,8 +496,8 @@ Nedostaju:
 
 Prije većih promjena poželjno je prikupiti barem jedan poznati dobar komplet:
 
-1. model, inačicu ugrađenoga softvera, njegov status podrške/EoL i
-   serijski/USB adapter konkretnoga FSH6;
+1. model, inačicu ugrađenoga softvera, njegov status podrške i završetka
+   životnoga ciklusa (EoL) te serijski/USB adapter konkretnoga FSH6;
 2. sirovi serijski zapis od otvaranja porta do `LOCAL` naredbe;
 3. odgovore na svaku `CMD`, `SET` i `GET` naredbu;
 4. nekoliko uzastopnih tragova, uključujući prvi odbačeni trag;

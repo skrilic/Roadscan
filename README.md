@@ -7,9 +7,26 @@ FSH6, dodaje sustavsko UTC vrijeme te rezultate sprema kao CSV i PNG.
 
 Sustav je u različitim razdobljima uporabe odradio više stvarnih mjernih
 vožnji, uključujući sesije koje su trajale po nekoliko sati. Zatečene
-hardverske i sistemske zaobilaznice zato treba promatrati u vremenskom i
+hardverske i sustavske zaobilaznice zato treba promatrati u vremenskom i
 operativnom kontekstu u kojem su nastale, a ne kao dokaz da sustav nije bio
 funkcionalan.
+
+## Izvorna motivacija
+
+RoadScan je nastao radi indikativne, neovisne terenske provjere koliko stvarna
+pokrivenost radijskim i komunikacijskim uslugama odgovara javno deklariranim
+podacima i obvezama operatora iz dodijeljenih dozvola. Mjerenja nisu zamišljena
+kao konačni regulatorni dokaz ni kao alat za sankcioniranje, nego kao grubi
+pregled stanja mreže koji može otkriti područja za detaljniju provjeru te dati
+korisne informacije operatorima, regulatoru i korisnicima.
+
+Izmjerena jakost signala nužan je, ali ne i dovoljan uvjet za postizanje
+određene kvalitete veze. Ako je u konkretnoj točki i uvjetima mjerenja razina
+signala niža od potrebnoga praga, deklarirana kvaliteta ondje nije teoretski
+ostvariva. Razina iznad praga potvrđuje samo postojanje osnovnoga RF preduvjeta;
+kvaliteta veze, brzina prijenosa, latencija i raspoloživost ovise i o
+interferenciji, odnosu signala i šuma, kapacitetu, opterećenju mreže i drugim
+čimbenicima.
 
 Zbirni `measlog.csv` služi za naknadnu izradu KML putanje s poveznicama na
 pojedinačne spektre.
