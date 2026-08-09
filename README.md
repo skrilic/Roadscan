@@ -1,76 +1,86 @@
 # RoadScan
 
-RoadScan je naslijeđeni terenski sustav za mobilno kartiranje
-radiofrekvencijskoga spektra. U jednom mjernom ciklusu softver pridružuje
-položaj vanjskoga GPS prijamnika tragu spektra s analizatora Rohde & Schwarz
-FSH6, dodaje sustavsko UTC vrijeme te rezultate sprema kao CSV i PNG.
+**English** · [Hrvatski](README_HR.md)
 
-Sustav je u različitim razdobljima uporabe odradio više stvarnih mjernih
-vožnji, uključujući sesije koje su trajale po nekoliko sati. Zatečene
-hardverske i sustavske zaobilaznice zato treba promatrati u vremenskom i
-operativnom kontekstu u kojem su nastale, a ne kao dokaz da sustav nije bio
-funkcionalan.
+RoadScan is a legacy field system for mobile radio-frequency spectrum mapping.
+During each measurement cycle, the software associates a position from an
+external GPS receiver with a spectrum trace acquired from a Rohde & Schwarz
+FSH6 spectrum analyzer, adds a UTC timestamp from the host system, and stores
+the results as CSV and PNG files.
 
-## Izvorna motivacija
+The system completed multiple real-world measurement drives during different
+periods of use, including sessions lasting several hours. The hardware- and
+operating-system-level workarounds found in the code should therefore be
+understood in the historical and operational context in which they were
+introduced, rather than as evidence that the system was not functional.
 
-RoadScan je nastao radi indikativne, neovisne terenske provjere koliko stvarna
-pokrivenost radijskim i komunikacijskim uslugama odgovara javno deklariranim
-podacima i obvezama operatora iz dodijeljenih dozvola. Mjerenja nisu zamišljena
-kao konačni regulatorni dokaz ni kao alat za sankcioniranje, nego kao grubi
-pregled stanja mreže koji može otkriti područja za detaljniju provjeru te dati
-korisne informacije operatorima, regulatoru i korisnicima.
+## Original Motivation
 
-Izmjerena jakost signala nužan je, ali ne i dovoljan uvjet za postizanje
-određene kvalitete veze. Ako je u konkretnoj točki i uvjetima mjerenja razina
-signala niža od potrebnoga praga, deklarirana kvaliteta ondje nije teoretski
-ostvariva. Razina iznad praga potvrđuje samo postojanje osnovnoga RF preduvjeta;
-kvaliteta veze, brzina prijenosa, latencija i raspoloživost ovise i o
-interferenciji, odnosu signala i šuma, kapacitetu, opterećenju mreže i drugim
-čimbenicima.
+RoadScan was created to provide an indicative, independent field assessment of
+how closely the actual coverage of radio and communications services matched
+publicly declared information and the obligations imposed on network operators
+by their assigned licenses. The measurements were not intended as conclusive
+regulatory evidence or as an enforcement tool. Instead, they provided an
+indicative overview of network conditions that could identify areas warranting
+closer investigation and offer useful information to network operators, the
+regulator, and end users.
 
-Zbirni `measlog.csv` služi za naknadnu izradu KML putanje s poveznicama na
-pojedinačne spektre.
+The measured received signal level is a necessary, but not sufficient,
+condition for achieving a specified connection quality. If, at a particular
+location and under the conditions of the measurement, the signal level is below
+the required threshold, the declared quality is not theoretically achievable
+there. A level above the threshold establishes only the basic RF prerequisite;
+connection quality, data rate, latency, and availability also depend on
+interference, signal-to-noise ratio, capacity, network load, and other factors.
+
+The aggregate `measlog.csv` is used for the subsequent generation of a KML
+route with links to individual spectrum traces.
 
 ```text
-GPS + FSH6 + INI profil
+GPS + FSH6 + INI measurement profile
           │
           v
-     mjerni ciklus
+    measurement cycle
           │
-          ├── pojedinačni CSV traga
+          ├── CSV for an individual trace
           ├── measlog.csv
-          └── PNG spektra
+          └── spectrum PNG
                     │
                     v
-               KML izvoz
+                KML export
 ```
 
-Softver GPS i FSH6 podatke dohvaća sekvencijski; postojeći kod ne jamči
-njihovu istodobnost ni zajedničku vremensku sinkronizaciju.
+The software acquires GPS and FSH6 data sequentially; the existing code does
+not guarantee that they are simultaneous or that they share a common time
+reference.
 
-## Razvojne inačice
+## Development Versions
 
-Repozitorij sadrži nekoliko razvojnih generacija:
+The repository contains several generations of the application:
 
-- `gpspectrum.py` — izvorni monolitni program za naredbeni redak;
-- `roadscan-cli.py` — novija inačica za naredbeni redak;
-- `roadscan-gui.py` — Tkinter GUI iznad novijega hardverskog sloja;
-- `maplayer.py` i `maplayer-gui.py` — naknadni izvoz `measlog.csv` u KML.
+- `gpspectrum.py` — the original monolithic command-line application;
+- `roadscan-cli.py` — a newer command-line version;
+- `roadscan-gui.py` — a Tkinter GUI built on the newer hardware layer;
+- `maplayer.py` and `maplayer-gui.py` — post-processing tools that export
+  `measlog.csv` to KML.
 
-Kod je konačno razvijan za Python 2.7 i Linux. Povijesni rad sa stvarnim
-FSH6/GPS sklopom potvrđen je terenskim mjerenjima, ali zatečena revizija nije
-ponovno ispitana sa suvremenim Pythonom, današnjim Linuxom ni eventualno
-drukčijom inačicom ugrađenoga softvera FSH6. Ovisnosti nisu zaključane niti
-potpuno navedene. Skripte za pokretanje predstavljaju povijesno terensko
-okruženje, a ne trenutačno reproducibilan postupak instalacije.
+The final development target was Python 2.7 on Linux. Historical operation with
+the actual FSH6/GPS setup is confirmed by field measurements, but the preserved
+revision has not been retested with a current Python version, a contemporary
+Linux system, or a potentially different FSH6 firmware version. Dependencies
+are neither pinned nor exhaustively declared. The launcher scripts document
+the historical field environment rather than a currently reproducible
+installation procedure.
 
-## Dokumentacija
+## Documentation
 
-Detaljan opis razvojnih grana, modula, mjernoga toka, serijskoga protokola,
-formata podataka, vizualizacije i poznatih problematičnih mjesta nalazi se u:
+A detailed description of the development branches, modules, measurement
+workflow, serial protocol, data formats, visualization, and known problem areas
+is available in Croatian:
 
-- [Arhitektura i poznata problematična mjesta](docs/arhitektura-i-poznati-problemi.md)
+- [Architecture and known problem areas](docs/arhitektura-i-poznati-problemi.md)
 
-Dokumentacija posebno odvaja potvrđene programske nedostatke, potvrđene
-protokolarne zahtjeve FSH6 i ostale povijesne zaobilaznice koje prije izmjene
-treba provjeriti snimkom stvarne komunikacije.
+The documentation explicitly distinguishes confirmed software defects,
+confirmed FSH6 protocol requirements, and other historical workarounds that
+should be validated against captured communication with the actual hardware
+before being altered.
